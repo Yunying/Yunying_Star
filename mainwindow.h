@@ -11,11 +11,15 @@
 #include <QLineEdit>
 #include <QApplication>
 #include <QPushButton>
+#include <QMessageBox>
 #include <QPixmap>
 #include <QBrush>
 #include <QImage>
 #include <QFont>
+#include <QString>
 #include <vector>
+#include <string>
+#include <sstream>
 
 using namespace std;
 
@@ -27,6 +31,7 @@ class MainWindow: public QWidget{
     ~MainWindow();
     void show();
     
+    string toStr(int);
     void add_life();
     void lose_life();
     bool isLive();
@@ -47,6 +52,7 @@ class MainWindow: public QWidget{
     QGraphicsSimpleTextItem *life;
     QGraphicsSimpleTextItem *score;
     QGraphicsSimpleTextItem *lifecount;
+    QString *name;
     
   
   public slots:

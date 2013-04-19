@@ -65,6 +65,18 @@ MainWindow::MainWindow(){
 MainWindow::~MainWindow(){}
 
 void MainWindow::handleStart(){
+  //Check if the user has entered a username
+  if (username->isModified() == false){
+    QMessageBox errorBox(QMessageBox::NoIcon, "ERROR", "Please enter a username!");
+    errorBox.exec();
+    return;
+  }
+  
+  else{
+    name = new QString(username->text());
+  }
+
+
   //Set the new Scene
   gamescene = new QGraphicsScene();
   QPixmap gamenight("./GameNight");
@@ -100,7 +112,11 @@ void MainWindow::handleStart(){
 
 }
 
-
+string MainWindow::toStr(int num){
+  stringstream ss;
+  ss << num;
+  return ss.str();
+}
 
 
 
