@@ -1,4 +1,5 @@
 #include "bomb.h"
+#include "mainwindow.h"
 
 using namespace std;
 
@@ -7,7 +8,7 @@ Bomb::Bomb(){}
 Bomb::~Bomb(){}
 
 
-Bomb::Bomb(QPixmap& bombIma, int nx, int ny, int nvx, int nvy) : 
+Bomb::Bomb(QPixmap& bombIma, int nx, int ny, int nvx, int nvy, MainWindow *mw) : 
   QGraphicsPixmapItem(bombIma){
     x = nx;
     y = ny;
@@ -17,6 +18,7 @@ Bomb::Bomb(QPixmap& bombIma, int nx, int ny, int nvx, int nvy) :
     vy = nvy;
     width = 100;
     height = 100;
+    window = mw;
     
 }
 
@@ -46,10 +48,19 @@ void Bomb::move(int windowMaxX, int windowMaxY){
   }
 
   setPos(x, y);
-    //Everything is good. Update the QRectF that is actually displayed.
-    //QPointF p( x, y );
-    //QRectF r( rect() );
-    //r.moveTo(p);
-    //setRect( r );
 }
+
+void Bomb::mousePressEvent(QGraphicsSceneMouseEvent *event){
+  event = event;
+  window->myBombTime = 490;
+  
+}
+
+
+
+
+
+
+
+
 

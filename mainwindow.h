@@ -23,6 +23,7 @@
 #include <sstream>
 #include "bomb.h"
 #include "thing.h"
+#include "car.h"
 
 using namespace std;
 
@@ -38,6 +39,9 @@ class MainWindow: public QWidget{
     void add_life();
     void lose_life();
     bool isLive();
+    
+    friend class Bomb;
+    friend class Car;
     
   private:
     int lifeNum;
@@ -61,11 +65,17 @@ class MainWindow: public QWidget{
     QTimer *bomb_show_timer;
     QTimer *bomb_move_timer;
     Bomb *myBomb;
+    
+    QTimer *car_show_timer;
+    QTimer *car_move_timer;
+    Car *myCar;
   
   public slots:
     void handleStart();
     void handleBombShowTimer();
     void handleBombTimer();
+    void handleCarShowTimer();
+    void handleCarTimer();
 };
 
 #endif

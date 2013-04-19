@@ -99,16 +99,16 @@ void MainWindow::handleStart(){
   gamescene->addItem(score);
   
   //Bomb
-
   bomb_show_timer = new QTimer(this);
   connect(bomb_show_timer, SIGNAL(timeout()), this, SLOT(handleBombShowTimer()));
-  bomb_show_timer->start(5000);
+  bomb_show_timer->start(10000);
   
   //Dropping Stars
   
-  //Appear Bombs
-  
   //Appear Car
+  car_show_timer = new QTimer(this);
+  connect(car_show_timer, SIGNAL(timeout()), this, SLOT(handleCarShowTimer()));
+  car_show_timer->start(5000);
   
   //Score increase/decrease
   
@@ -126,10 +126,10 @@ void MainWindow::handleBombShowTimer(){
   QPixmap bombImage("./Bomb.png");
   int coX = rand() % 300;
   int coY = rand() % 300;
-  int Vx = rand() % 20;
-  int Vy = rand() % 20;
+  int Vx = rand() % 10;
+  int Vy = rand() % 10;
   
-  myBomb = new Bomb(bombImage, coX, coY, Vx, Vy);
+  myBomb = new Bomb(bombImage, coX, coY, Vx, Vy, this);
 
   gamescene->addItem(myBomb);
   bomb_move_timer = new QTimer(this);
@@ -137,15 +137,13 @@ void MainWindow::handleBombShowTimer(){
   bomb_move_timer->start(10);
 }
   
-  
-
 
 void MainWindow::handleBombTimer(){
   myBomb->move(1000, 760);
   myBombTime++;
   
   //Bomb Disappear
-  if (myBombTime == 300){
+  if (myBombTime == 500){
     gamescene->removeItem(myBomb);
     bomb_move_timer->stop();
     delete bomb_move_timer;
@@ -154,6 +152,26 @@ void MainWindow::handleBombTimer(){
   }
 }
 
+void MainWindow::handleCarShowTimer(){
+  QPixmap carImage("./Car.png");
+  myCar = new Car(carImage, 10);
+
+  gamescene->addItem(myCar);
+  car_move_timer = new QTimer(this);
+  connect(car_move_timer, SIGNAL(timeout()), this, SLOT(handleCarTimer()));
+  car_move_timer->start(10);
+}
+
+void MainWindow::handleCarTimer(){
+  myCar->move();
+  
+  if (myCar->carStatus){
+    gamescene->removeItem(myCar);
+    car_move_timer->stop();
+    delete car_move_timer;
+    delete myCar;
+  }
+}
 
 
 
