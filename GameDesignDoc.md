@@ -74,5 +74,11 @@ Game difficulty will increase as time moves on:
 
 ##User Interface
 ![UserInterFace](http://ww1.sinaimg.cn/bmiddle/6fb2ab4dgw1e3uludgkoxj.jpg "UserInterface")
+
+User should enter his/her username into the Usernema Box. And then Click `Start` button.
+
+If the user click `Start` before entering a username, an error message will appear.
+
+After the user click `Start`, the scene will change to the one in the first part and game starts.
 	
 	
