@@ -42,7 +42,7 @@ class MainWindow: public QWidget{
   private:
     int lifeNum;
     int scoreNum;
-    
+    int myBombTime;
     
     QGraphicsView *view;
     QGraphicsScene *scene;
@@ -57,12 +57,14 @@ class MainWindow: public QWidget{
     QGraphicsSimpleTextItem *score;
     QGraphicsSimpleTextItem *lifecount;
     QString *name;
-    QTimer *bomb_timer;
     
+    QTimer *bomb_show_timer;
+    QTimer *bomb_move_timer;
     Bomb *myBomb;
   
   public slots:
     void handleStart();
+    void handleBombShowTimer();
     void handleBombTimer();
 };
 

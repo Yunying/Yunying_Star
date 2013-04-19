@@ -13,6 +13,7 @@ MainWindow::MainWindow(){
   //Some Initialization
   lifeNum = 0;
   scoreNum = 0;
+  myBombTime = 0;
 
   //View
   scene = new QGraphicsScene();
@@ -98,14 +99,10 @@ void MainWindow::handleStart(){
   gamescene->addItem(score);
   
   //Bomb
-  QPixmap bombImage("./Bomb.png");
-  myBomb = new Bomb(bombImage, 100, 100, 10, 10);
-  gamescene->addItem(myBomb);
-  
-  //Begin a bomb_timer
-  bomb_timer = new QTimer(this);
-  connect(bomb_timer, SIGNAL(timeout()), this, SLOT(handleBombTimer()));
-  bomb_timer->start(10);
+
+  bomb_show_timer = new QTimer(this);
+  connect(bomb_show_timer, SIGNAL(timeout()), this, SLOT(handleBombShowTimer()));
+  bomb_show_timer->start(5000);
   
   //Dropping Stars
   
@@ -125,14 +122,36 @@ string MainWindow::toStr(int num){
   return ss.str();
 }
 
-void MainWindow::handleBombTimer(){
-  //double upleftX = rand () % 500;
-  //double upleftY = rand () % 500;
-  //int vx = rand () % 20;
-  //int vy = rand () % 20;
-  //mybomb = new myBomb(upleftX, upleftY, 20.0, 20.0, vx, vy);
+void MainWindow::handleBombShowTimer(){
+  QPixmap bombImage("./Bomb.png");
+  int coX = rand() % 300;
+  int coY = rand() % 300;
+  int Vx = rand() % 20;
+  int Vy = rand() % 20;
   
+  myBomb = new Bomb(bombImage, coX, coY, Vx, Vy);
+
+  gamescene->addItem(myBomb);
+  bomb_move_timer = new QTimer(this);
+  connect(bomb_move_timer, SIGNAL(timeout()), this, SLOT(handleBombTimer()));
+  bomb_move_timer->start(10);
+}
+  
+  
+
+
+void MainWindow::handleBombTimer(){
   myBomb->move(1000, 760);
+  myBombTime++;
+  
+  //Bomb Disappear
+  if (myBombTime == 300){
+    gamescene->removeItem(myBomb);
+    bomb_move_timer->stop();
+    delete bomb_move_timer;
+    delete myBomb;
+    myBombTime = 0;
+  }
 }
 
 
