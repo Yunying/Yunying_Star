@@ -83,22 +83,29 @@ void MainWindow::handleStart(){
   view->setScene(gamescene);
   gamescene->addPixmap(gamenight);
   
-  //Set Life
+  //Set Life (INITIALIZATION)
   life = new QGraphicsSimpleTextItem("Life:");
   life->setFont(QFont("Helvatica", 18, 50));
   life->setBrush(whiteBrush);
   life->setPos(30, 20);
   gamescene->addItem(life);
   
-  //Set Score
+  //Set Score (INITIALIZATION)
   score = new QGraphicsSimpleTextItem("Score:");
   score->setFont(QFont("Helvatica", 18, 50));
   score->setBrush(whiteBrush);
   score->setPos(190, 20);
   gamescene->addItem(score);
   
+  //Bomb
+  QPixmap bombImage("./Bomb.png");
+  myBomb = new Bomb(bombImage, 100, 100, 10, 10);
+  gamescene->addItem(myBomb);
   
-  //Begin a timer
+  //Begin a bomb_timer
+  bomb_timer = new QTimer(this);
+  connect(bomb_timer, SIGNAL(timeout()), this, SLOT(handleBombTimer()));
+  bomb_timer->start(10);
   
   //Dropping Stars
   
@@ -118,7 +125,15 @@ string MainWindow::toStr(int num){
   return ss.str();
 }
 
-
+void MainWindow::handleBombTimer(){
+  //double upleftX = rand () % 500;
+  //double upleftY = rand () % 500;
+  //int vx = rand () % 20;
+  //int vy = rand () % 20;
+  //mybomb = new myBomb(upleftX, upleftY, 20.0, 20.0, vx, vy);
+  
+  myBomb->move(1000, 760);
+}
 
 
 

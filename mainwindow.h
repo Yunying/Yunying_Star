@@ -12,6 +12,7 @@
 #include <QApplication>
 #include <QPushButton>
 #include <QMessageBox>
+#include <QTimer>
 #include <QPixmap>
 #include <QBrush>
 #include <QImage>
@@ -20,6 +21,8 @@
 #include <vector>
 #include <string>
 #include <sstream>
+#include "bomb.h"
+#include "thing.h"
 
 using namespace std;
 
@@ -40,6 +43,7 @@ class MainWindow: public QWidget{
     int lifeNum;
     int scoreNum;
     
+    
     QGraphicsView *view;
     QGraphicsScene *scene;
     QGraphicsScene *gamescene;
@@ -53,10 +57,13 @@ class MainWindow: public QWidget{
     QGraphicsSimpleTextItem *score;
     QGraphicsSimpleTextItem *lifecount;
     QString *name;
+    QTimer *bomb_timer;
     
+    Bomb *myBomb;
   
   public slots:
     void handleStart();
+    void handleBombTimer();
 };
 
 #endif
