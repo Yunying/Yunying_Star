@@ -12,7 +12,7 @@ void MainWindow::show(){
 MainWindow::MainWindow(){
   //Some Initialization
   lifeNum = 0;
-  score = 0;
+  scoreNum = 0;
 
   //View
   scene = new QGraphicsScene();
@@ -71,8 +71,19 @@ void MainWindow::handleStart(){
   view->setScene(gamescene);
   gamescene->addPixmap(gamenight);
   
-  //Set the life Moon 
-  lifeMoon = new QPixmap("./lifemoon.jpg");
+  //Set Life
+  life = new QGraphicsSimpleTextItem("Life:");
+  life->setFont(QFont("Helvatica", 18, 50));
+  life->setBrush(whiteBrush);
+  life->setPos(30, 20);
+  gamescene->addItem(life);
+  
+  //Set Score
+  score = new QGraphicsSimpleTextItem("Score:");
+  score->setFont(QFont("Helvatica", 18, 50));
+  score->setBrush(whiteBrush);
+  score->setPos(190, 20);
+  gamescene->addItem(score);
   
   
   //Begin a timer
@@ -88,15 +99,6 @@ void MainWindow::handleStart(){
   //Life
 
 }
-
-void MainWindow::add_life(){
-  if (lifeNum == 3){
-    score = score + 1000;
-  }
-  
-  else if (lifeNum == 1){
-    gamescene->addPixmap(lifeMoon
-
 
 
 

@@ -33,7 +33,7 @@ class MainWindow: public QWidget{
     
   private:
     int lifeNum;
-    int score;
+    int scoreNum;
     
     QGraphicsView *view;
     QGraphicsScene *scene;
@@ -44,8 +44,9 @@ class MainWindow: public QWidget{
     QGraphicsSimpleTextItem *twinkle;
     QGraphicsSimpleTextItem *usernametext;
     QLineEdit *username;
-    QPixmap *lifemoon;
-    QGraphicsPixmapItem *lifeMoon;
+    QGraphicsSimpleTextItem *life;
+    QGraphicsSimpleTextItem *score;
+    QGraphicsSimpleTextItem *lifecount;
     
   
   public slots:
