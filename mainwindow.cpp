@@ -16,6 +16,7 @@ MainWindow::MainWindow(){
   myBombTime = 0;
   myMoonTime = 0;
   myGirlTime = 0;
+  myStarTime = 0;
 
 
   //View
@@ -105,19 +106,23 @@ void MainWindow::handleStart(){
   //Bomb
   bomb_show_timer = new QTimer(this);
   connect(bomb_show_timer, SIGNAL(timeout()), this, SLOT(handleBombShowTimer()));
-  bomb_show_timer->start(10000);
+  bomb_show_timer->start(30000);
   
   //Dropping Stars
+  star_show_timer = new QTimer(this);
+  connect(star_show_timer, SIGNAL(timeout()), this, SLOT(handleStarTimer()));
+  star_show_timer -> start(10);
+  
   
   //Appear Car
   car_show_timer = new QTimer(this);
   connect(car_show_timer, SIGNAL(timeout()), this, SLOT(handleCarShowTimer()));
-  car_show_timer->start(5000);
+  car_show_timer->start(10000);
   
   //Moon
   moon_show_timer = new QTimer(this);
   connect(moon_show_timer, SIGNAL(timeout()), this, SLOT(handleMoonShowTimer()));
-  moon_show_timer->start(20000);
+  moon_show_timer->start(90000);
   
   //Girl
   QPixmap girlImage("./Girl.png");
@@ -125,8 +130,7 @@ void MainWindow::handleStart(){
   gamescene->addItem(myGirl);
   girl_timer = new QTimer(this);
   connect(girl_timer, SIGNAL(timeout()), this, SLOT(handleGirlTimer()));
-  girl_timer->start(20);
-  
+
   
   //Score increase/decrease
   
@@ -144,8 +148,8 @@ void MainWindow::handleBombShowTimer(){
   QPixmap bombImage("./Bomb.png");
   int coX = rand() % 300;
   int coY = rand() % 300;
-  int Vx = rand() % 10;
-  int Vy = rand() % 10;
+  int Vx = rand() % 7+2;
+  int Vy = rand() % 7+2;
   
   myBomb = new Bomb(bombImage, coX, coY, Vx, Vy, this);
 
@@ -193,7 +197,7 @@ void MainWindow::handleCarTimer(){
 
 void MainWindow::handleMoonShowTimer(){
   QPixmap moonImage("./Moon.png");
-  int ran = rand() % 1000;
+  int ran = rand() % 700+100;
   myMoon = new Moon(moonImage, ran);
   gamescene->addItem(myMoon);
   moon_move_timer = new QTimer(this);
@@ -204,14 +208,14 @@ void MainWindow::handleMoonShowTimer(){
 void MainWindow::handleMoonTimer(){
   myMoonTime++;
   
-  if (myMoonTime <= 220){
+  if (myMoonTime <= 200){
     myMoon->come();
   }
   
-  else if (myMoonTime >220 && myMoonTime <= 750){
+  else if (myMoonTime >200 && myMoonTime <= 550){
   }
   
-  else if (myMoonTime > 750 && myMoonTime < 970){
+  else if (myMoonTime > 550 && myMoonTime < 750){
     myMoon->leave();
   } 
   
@@ -236,9 +240,9 @@ void MainWindow::keyPressEvent(QKeyEvent *e) {
     case Qt::Key_Escape:
       QApplication::quit();
       break;
-    //case Qt::Key_Space:
-      //myGirl->jump();
-      //break;
+    case Qt::Key_Space:
+      girlAction();
+      break;
     case Qt::Key_A:
       cout << "Got you" << endl;
       break;
@@ -250,27 +254,76 @@ void MainWindow::handleGirlTimer(){
   if (myGirlTime <= 100){
   }
   
-  else if (myGirlTime < 125) {
+  else if (myGirlTime <= 125) {
     myGirl->jumpU();
+    if (myGirlTime == 125){myGirl->vy = 0; }
   }
 
   
-  else if (myGirlTime < 150){
+  else if (myGirlTime <= 150){
     myGirl->jumpD();
+    if (myGirlTime == 150) {myGirl->vy = 10; }
   }
 
-  //else if (myGirlTime == 150){
-    //cout << "MyGirl" << endl;
-  //}
   else{
     myGirlTime = 0;
     girl_timer -> stop();
-    //cout << myGirlTime << endl;
   }
 }
   
+void MainWindow::girlAction(){
+  girl_timer->start(20);
   
+} 
 
-
+void MainWindow::handleStarTimer(){
+  myStarTime++;
+  unsigned int starCount = 0;
+  while (starCount < stars.size()){
+    if (stars[starCount]->inscreen){
+      stars[starCount]->move();
+      starCount++;
+    }
+    
+    else {
+      gamescene->removeItem(stars[starCount]);
+      stars.erase(stars.begin() + starCount);
+    }
+  }
+  
+  
+  QPixmap greenStar("./greenStar.png");
+  QPixmap redStar("./redStar.png");
+  QPixmap yellowStar("./yellowStar.png");
+  QPixmap blueStar("./blueStar.png");
+  
+  if (myStarTime == 50){
+    int sx = rand() % 900+50;
+    int svy = rand() % 3+1;
+    int color = rand() % 4;
+    switch(color){
+      case 0:
+        stars.push_back(new Star(greenStar, sx, svy));
+        break;
+      
+      case 1:
+        stars.push_back(new Star(redStar, sx, svy));
+        break;
+        
+      case 2:
+        stars.push_back(new Star(yellowStar, sx, svy));
+        break;
+      
+      case 3:
+        stars.push_back(new Star(blueStar, sx, svy));
+        break;
+     }
+     
+     gamescene->addItem(stars.back());
+     myStarTime = 0;
+  }
+}
+      
+  
 
 

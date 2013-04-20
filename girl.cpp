@@ -31,13 +31,15 @@ void Girl::jumpU(){
     vy = vy - 0.4;
     y = y-vy;
     setPos(x, y);
-    cout << vy << " " << y << endl;
 }
 
 void Girl::jumpD(){
     vy = vy+0.4;
-    y = y+vy;
-    setPos(x, y);
+    if (y+vy > 500) {setPos(x, 500);}
+    else {
+      y = y+vy;
+      setPos(x, y);
+    }
 }
 
 

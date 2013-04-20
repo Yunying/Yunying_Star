@@ -27,6 +27,7 @@
 #include "car.h"
 #include "moon.h"
 #include "girl.h"
+#include "star.h"
 
 using namespace std;
 
@@ -42,6 +43,7 @@ class MainWindow: public QWidget{
     void add_life();
     void lose_life();
     bool isLive();
+    void girlAction();
     
     
     friend class Bomb;
@@ -53,6 +55,7 @@ class MainWindow: public QWidget{
     int myBombTime;
     int myMoonTime;
     int myGirlTime;
+    int myStarTime;
     
     QGraphicsView *view;
     QGraphicsScene *scene;
@@ -82,6 +85,9 @@ class MainWindow: public QWidget{
     
     QTimer *girl_timer;
     Girl *myGirl;
+    
+    vector<Star*> stars;
+    QTimer *star_show_timer;
   
   public slots:
     void handleStart();
@@ -92,6 +98,7 @@ class MainWindow: public QWidget{
     void handleMoonShowTimer();
     void handleMoonTimer();
     void handleGirlTimer();
+    void handleStarTimer();
     void keyPressEvent(QKeyEvent *event);
 };
 

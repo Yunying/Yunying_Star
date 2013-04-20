@@ -15,6 +15,7 @@ class Girl : public QGraphicsPixmapItem{
     void moveRight();
     void jumpU();
     void jumpD();
+    friend class MainWindow;
     
   private:
     double x;

@@ -11,7 +11,7 @@ Car::Car(QPixmap& carImage,int nv):
     x = 0;
     v = nv;
     setZValue(3);
-    setPos(x, 518);
+    setPos(x, 510);
     width = 100;
     carStatus = false;
 }
@@ -24,6 +24,6 @@ void Car::move(){
     return;
   }
   
-  setPos(x, 518);
+  setPos(x, 510);
 }
 
