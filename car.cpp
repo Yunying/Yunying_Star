@@ -10,8 +10,8 @@ Car::Car(QPixmap& carImage,int nv):
   QGraphicsPixmapItem(carImage){
     x = 0;
     v = nv;
-    setZValue(1);
-    setPos(x, 500);
+    setZValue(3);
+    setPos(x, 518);
     width = 100;
     carStatus = false;
 }
@@ -24,6 +24,6 @@ void Car::move(){
     return;
   }
   
-  setPos(x, 500);
+  setPos(x, 518);
 }
 

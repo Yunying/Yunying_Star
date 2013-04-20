@@ -18,6 +18,7 @@
 #include <QImage>
 #include <QFont>
 #include <QString>
+#include <QKeyEvent>
 #include <vector>
 #include <string>
 #include <sstream>
@@ -25,6 +26,7 @@
 #include "thing.h"
 #include "car.h"
 #include "moon.h"
+#include "girl.h"
 
 using namespace std;
 
@@ -41,6 +43,7 @@ class MainWindow: public QWidget{
     void lose_life();
     bool isLive();
     
+    
     friend class Bomb;
     friend class Car;
     
@@ -49,6 +52,7 @@ class MainWindow: public QWidget{
     int scoreNum;
     int myBombTime;
     int myMoonTime;
+    int myGirlTime;
     
     QGraphicsView *view;
     QGraphicsScene *scene;
@@ -75,6 +79,9 @@ class MainWindow: public QWidget{
     QTimer *moon_show_timer;
     QTimer *moon_move_timer;
     Moon *myMoon;
+    
+    QTimer *girl_timer;
+    Girl *myGirl;
   
   public slots:
     void handleStart();
@@ -84,6 +91,8 @@ class MainWindow: public QWidget{
     void handleCarTimer();
     void handleMoonShowTimer();
     void handleMoonTimer();
+    void handleGirlTimer();
+    void keyPressEvent(QKeyEvent *event);
 };
 
 #endif

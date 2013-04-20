@@ -15,7 +15,8 @@ MainWindow::MainWindow(){
   scoreNum = 0;
   myBombTime = 0;
   myMoonTime = 0;
-  setFocus();
+  myGirlTime = 0;
+
 
   //View
   scene = new QGraphicsScene();
@@ -85,6 +86,7 @@ void MainWindow::handleStart(){
   QPixmap gamenight("./GameNight");
   view->setScene(gamescene);
   gamescene->addPixmap(gamenight);
+
   
   //Set Life (INITIALIZATION)
   life = new QGraphicsSimpleTextItem("Life:");
@@ -116,6 +118,14 @@ void MainWindow::handleStart(){
   moon_show_timer = new QTimer(this);
   connect(moon_show_timer, SIGNAL(timeout()), this, SLOT(handleMoonShowTimer()));
   moon_show_timer->start(20000);
+  
+  //Girl
+  QPixmap girlImage("./Girl.png");
+  myGirl = new Girl(girlImage);
+  gamescene->addItem(myGirl);
+  girl_timer = new QTimer(this);
+  connect(girl_timer, SIGNAL(timeout()), this, SLOT(handleGirlTimer()));
+  girl_timer->start(20);
   
   
   //Score increase/decrease
@@ -188,7 +198,7 @@ void MainWindow::handleMoonShowTimer(){
   gamescene->addItem(myMoon);
   moon_move_timer = new QTimer(this);
   connect(moon_move_timer, SIGNAL(timeout()), this, SLOT(handleMoonTimer()));
-  moon_move_timer->start(10);
+  moon_move_timer->start(20);
 }
 
 void MainWindow::handleMoonTimer(){
@@ -214,6 +224,50 @@ void MainWindow::handleMoonTimer(){
   }
 }
   
+void MainWindow::keyPressEvent(QKeyEvent *e) {
+  cout << "clicked" << endl;
+  switch (e->key()){
+    case Qt::Key_Left:
+      myGirl->moveLeft();
+      break;
+    case Qt::Key_Right:
+      myGirl->moveRight();
+      break;
+    case Qt::Key_Escape:
+      QApplication::quit();
+      break;
+    //case Qt::Key_Space:
+      //myGirl->jump();
+      //break;
+    case Qt::Key_A:
+      cout << "Got you" << endl;
+      break;
+  }
+}
+
+void MainWindow::handleGirlTimer(){
+  myGirlTime++;
+  if (myGirlTime <= 100){
+  }
+  
+  else if (myGirlTime < 125) {
+    myGirl->jumpU();
+  }
+
+  
+  else if (myGirlTime < 150){
+    myGirl->jumpD();
+  }
+
+  //else if (myGirlTime == 150){
+    //cout << "MyGirl" << endl;
+  //}
+  else{
+    myGirlTime = 0;
+    girl_timer -> stop();
+    //cout << myGirlTime << endl;
+  }
+}
   
   
 
