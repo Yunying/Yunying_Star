@@ -14,6 +14,8 @@ MainWindow::MainWindow(){
   lifeNum = 0;
   scoreNum = 0;
   myBombTime = 0;
+  myMoonTime = 0;
+  setFocus();
 
   //View
   scene = new QGraphicsScene();
@@ -110,6 +112,12 @@ void MainWindow::handleStart(){
   connect(car_show_timer, SIGNAL(timeout()), this, SLOT(handleCarShowTimer()));
   car_show_timer->start(5000);
   
+  //Moon
+  moon_show_timer = new QTimer(this);
+  connect(moon_show_timer, SIGNAL(timeout()), this, SLOT(handleMoonShowTimer()));
+  moon_show_timer->start(20000);
+  
+  
   //Score increase/decrease
   
   //Life
@@ -154,7 +162,7 @@ void MainWindow::handleBombTimer(){
 
 void MainWindow::handleCarShowTimer(){
   QPixmap carImage("./Car.png");
-  myCar = new Car(carImage, 10);
+  myCar = new Car(carImage, 5);
 
   gamescene->addItem(myCar);
   car_move_timer = new QTimer(this);
@@ -173,7 +181,41 @@ void MainWindow::handleCarTimer(){
   }
 }
 
+void MainWindow::handleMoonShowTimer(){
+  QPixmap moonImage("./Moon.png");
+  int ran = rand() % 1000;
+  myMoon = new Moon(moonImage, ran);
+  gamescene->addItem(myMoon);
+  moon_move_timer = new QTimer(this);
+  connect(moon_move_timer, SIGNAL(timeout()), this, SLOT(handleMoonTimer()));
+  moon_move_timer->start(10);
+}
 
+void MainWindow::handleMoonTimer(){
+  myMoonTime++;
+  
+  if (myMoonTime <= 220){
+    myMoon->come();
+  }
+  
+  else if (myMoonTime >220 && myMoonTime <= 750){
+  }
+  
+  else if (myMoonTime > 750 && myMoonTime < 970){
+    myMoon->leave();
+  } 
+  
+  else{
+    gamescene->removeItem(myMoon);
+    moon_move_timer->stop();
+    delete moon_move_timer;
+    delete myMoon;
+    myMoonTime = 0;
+  }
+}
+  
+  
+  
 
 
 

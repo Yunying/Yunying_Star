@@ -24,6 +24,7 @@
 #include "bomb.h"
 #include "thing.h"
 #include "car.h"
+#include "moon.h"
 
 using namespace std;
 
@@ -47,6 +48,7 @@ class MainWindow: public QWidget{
     int lifeNum;
     int scoreNum;
     int myBombTime;
+    int myMoonTime;
     
     QGraphicsView *view;
     QGraphicsScene *scene;
@@ -69,6 +71,10 @@ class MainWindow: public QWidget{
     QTimer *car_show_timer;
     QTimer *car_move_timer;
     Car *myCar;
+    
+    QTimer *moon_show_timer;
+    QTimer *moon_move_timer;
+    Moon *myMoon;
   
   public slots:
     void handleStart();
@@ -76,6 +82,8 @@ class MainWindow: public QWidget{
     void handleBombTimer();
     void handleCarShowTimer();
     void handleCarTimer();
+    void handleMoonShowTimer();
+    void handleMoonTimer();
 };
 
 #endif
