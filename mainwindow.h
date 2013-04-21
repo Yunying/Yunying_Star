@@ -2,6 +2,7 @@
 #define MAINWINDOW_H_
 
 #include <iostream>
+#include <QObject>
 #include <QMainWindow>
 #include <QWidget>
 #include <QGraphicsView>
@@ -70,6 +71,7 @@ class MainWindow: public QWidget{
     QGraphicsSimpleTextItem *score;
     QGraphicsSimpleTextItem *lifecount;
     QString *name;
+    QPushButton *Pause;
     
     QTimer *bomb_show_timer;
     QTimer *bomb_move_timer;

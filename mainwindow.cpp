@@ -17,7 +17,7 @@ MainWindow::MainWindow(){
   myMoonTime = 0;
   myGirlTime = 0;
   myStarTime = 0;
-
+  setFocus();
 
   //View
   scene = new QGraphicsScene();
@@ -103,10 +103,22 @@ void MainWindow::handleStart(){
   score->setPos(190, 20);
   gamescene->addItem(score);
   
+  //Set Pause Button
+  QPixmap pauseImage("./Pause.png");
+  Pause = new QPushButton();
+  Pause->setGeometry(900, 20, 70, 40);
+  QPalette PausePalette;
+  PausePalette.setBrush(Pause->backgroundRole(), QBrush(pauseImage));
+  Pause->setFlat(true);
+  Pause->setAutoFillBackground(true);
+  Pause->setPalette(PausePalette);
+  gamescene->addWidget(Pause);
+  
   //Bomb
   bomb_show_timer = new QTimer(this);
   connect(bomb_show_timer, SIGNAL(timeout()), this, SLOT(handleBombShowTimer()));
-  bomb_show_timer->start(30000);
+  bomb_show_timer->start(10000);
+  bomb_move_timer = new QTimer(this);
   
   //Dropping Stars
   star_show_timer = new QTimer(this);
@@ -118,11 +130,13 @@ void MainWindow::handleStart(){
   car_show_timer = new QTimer(this);
   connect(car_show_timer, SIGNAL(timeout()), this, SLOT(handleCarShowTimer()));
   car_show_timer->start(10000);
+  car_move_timer = new QTimer(this);
   
   //Moon
   moon_show_timer = new QTimer(this);
   connect(moon_show_timer, SIGNAL(timeout()), this, SLOT(handleMoonShowTimer()));
-  moon_show_timer->start(90000);
+  moon_show_timer->start(13000);
+
   
   //Girl
   QPixmap girlImage("./Girl.png");
@@ -154,7 +168,6 @@ void MainWindow::handleBombShowTimer(){
   myBomb = new Bomb(bombImage, coX, coY, Vx, Vy, this);
 
   gamescene->addItem(myBomb);
-  bomb_move_timer = new QTimer(this);
   connect(bomb_move_timer, SIGNAL(timeout()), this, SLOT(handleBombTimer()));
   bomb_move_timer->start(10);
 }
@@ -165,10 +178,9 @@ void MainWindow::handleBombTimer(){
   myBombTime++;
   
   //Bomb Disappear
-  if (myBombTime == 500){
+  if (myBombTime == 700){
     gamescene->removeItem(myBomb);
     bomb_move_timer->stop();
-    delete bomb_move_timer;
     delete myBomb;
     myBombTime = 0;
   }
@@ -179,7 +191,7 @@ void MainWindow::handleCarShowTimer(){
   myCar = new Car(carImage, 5);
 
   gamescene->addItem(myCar);
-  car_move_timer = new QTimer(this);
+
   connect(car_move_timer, SIGNAL(timeout()), this, SLOT(handleCarTimer()));
   car_move_timer->start(10);
 }
@@ -190,7 +202,6 @@ void MainWindow::handleCarTimer(){
   if (myCar->carStatus){
     gamescene->removeItem(myCar);
     car_move_timer->stop();
-    delete car_move_timer;
     delete myCar;
   }
 }
@@ -212,10 +223,10 @@ void MainWindow::handleMoonTimer(){
     myMoon->come();
   }
   
-  else if (myMoonTime >200 && myMoonTime <= 550){
+  else if (myMoonTime >200 && myMoonTime <= 350){
   }
   
-  else if (myMoonTime > 550 && myMoonTime < 750){
+  else if (myMoonTime > 350 && myMoonTime < 550){
     myMoon->leave();
   } 
   
@@ -225,6 +236,7 @@ void MainWindow::handleMoonTimer(){
     delete moon_move_timer;
     delete myMoon;
     myMoonTime = 0;
+    cout << "DeleteMoon" << endl;
   }
 }
   
@@ -297,7 +309,7 @@ void MainWindow::handleStarTimer(){
   QPixmap yellowStar("./yellowStar.png");
   QPixmap blueStar("./blueStar.png");
   
-  if (myStarTime == 50){
+  if (myStarTime == 100){
     int sx = rand() % 900+50;
     int svy = rand() % 3+1;
     int color = rand() % 4;
