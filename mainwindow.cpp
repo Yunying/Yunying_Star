@@ -118,7 +118,6 @@ void MainWindow::handleStart(){
   bomb_show_timer = new QTimer(this);
   connect(bomb_show_timer, SIGNAL(timeout()), this, SLOT(handleBombShowTimer()));
   bomb_show_timer->start(10000);
-  bomb_move_timer = new QTimer(this);
   
   //Dropping Stars
   star_show_timer = new QTimer(this);
@@ -130,7 +129,7 @@ void MainWindow::handleStart(){
   car_show_timer = new QTimer(this);
   connect(car_show_timer, SIGNAL(timeout()), this, SLOT(handleCarShowTimer()));
   car_show_timer->start(10000);
-  car_move_timer = new QTimer(this);
+  
   
   //Moon
   moon_show_timer = new QTimer(this);
@@ -162,11 +161,11 @@ void MainWindow::handleBombShowTimer(){
   QPixmap bombImage("./Bomb.png");
   int coX = rand() % 300;
   int coY = rand() % 300;
-  int Vx = rand() % 7+2;
-  int Vy = rand() % 7+2;
+  int Vx = rand() % 3+2;
+  int Vy = rand() % 3+2;
   
   myBomb = new Bomb(bombImage, coX, coY, Vx, Vy, this);
-
+  bomb_move_timer = new QTimer(this);
   gamescene->addItem(myBomb);
   connect(bomb_move_timer, SIGNAL(timeout()), this, SLOT(handleBombTimer()));
   bomb_move_timer->start(10);
@@ -178,9 +177,10 @@ void MainWindow::handleBombTimer(){
   myBombTime++;
   
   //Bomb Disappear
-  if (myBombTime == 700){
+  if (myBombTime == 400){
     gamescene->removeItem(myBomb);
     bomb_move_timer->stop();
+    delete bomb_move_timer;
     delete myBomb;
     myBombTime = 0;
   }
@@ -191,7 +191,7 @@ void MainWindow::handleCarShowTimer(){
   myCar = new Car(carImage, 5);
 
   gamescene->addItem(myCar);
-
+  car_move_timer = new QTimer(this);
   connect(car_move_timer, SIGNAL(timeout()), this, SLOT(handleCarTimer()));
   car_move_timer->start(10);
 }
@@ -202,6 +202,7 @@ void MainWindow::handleCarTimer(){
   if (myCar->carStatus){
     gamescene->removeItem(myCar);
     car_move_timer->stop();
+    delete car_move_timer;
     delete myCar;
   }
 }
@@ -236,7 +237,6 @@ void MainWindow::handleMoonTimer(){
     delete moon_move_timer;
     delete myMoon;
     myMoonTime = 0;
-    cout << "DeleteMoon" << endl;
   }
 }
   
