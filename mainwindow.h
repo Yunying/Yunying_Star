@@ -78,6 +78,7 @@ class MainWindow: public QWidget{
     QGraphicsSimpleTextItem *scoreN;
     QString *name;
     QPushButton *Pause;
+    QPushButton *quit;
     
     QTimer *bomb_show_timer;
     QTimer *bomb_move_timer;
@@ -108,6 +109,7 @@ class MainWindow: public QWidget{
     void handleGirlTimer();
     void handleStarTimer();
     void handlePause();
+    void handleQuit();
     void keyPressEvent(QKeyEvent *event);
 };
 

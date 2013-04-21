@@ -139,7 +139,7 @@ void MainWindow::handleStart(){
   //Set Pause Button
   QPixmap pauseImage("./Pause.png");
   Pause = new QPushButton();
-  Pause->setGeometry(900, 20, 70, 40);
+  Pause->setGeometry(830, 20, 55, 55);
   QPalette PausePalette;
   PausePalette.setBrush(Pause->backgroundRole(), QBrush(pauseImage));
   Pause->setFlat(true);
@@ -147,6 +147,18 @@ void MainWindow::handleStart(){
   Pause->setPalette(PausePalette);
   gamescene->addWidget(Pause);
   connect(Pause, SIGNAL(clicked()), this, SLOT(handlePause()));
+  
+  //Set Quit Button
+  QPixmap quitImage("./Quit.png");
+  quit = new QPushButton();
+  quit->setGeometry(900, 20, 55, 55);
+  QPalette quitPalette;
+  quitPalette.setBrush(quit->backgroundRole(), QBrush(quitImage));
+  quit->setFlat(true);
+  quit->setAutoFillBackground(true);
+  quit->setPalette(quitPalette);
+  gamescene->addWidget(quit);
+  connect(quit, SIGNAL(clicked()), this, SLOT(handleQuit()));
   
   //Bomb
   bomb_show_timer = new QTimer(this);
@@ -507,5 +519,10 @@ void MainWindow::checkStar(Star* star){
     checkScore();
   }
 }
+
+void MainWindow::handleQuit(){
+  QApplication::quit();
+}
+
 
 
