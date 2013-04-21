@@ -52,7 +52,7 @@ void Bomb::move(int windowMaxX, int windowMaxY){
 
 void Bomb::mousePressEvent(QGraphicsSceneMouseEvent *event){
   event = event;
-  window->myBombTime = 490;
+  window->myBombTime = 500;
   
 }
 

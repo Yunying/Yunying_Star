@@ -45,7 +45,8 @@ class MainWindow: public QWidget{
     void lose_life();
     bool isLive();
     void girlAction();
-    
+    void checkLife();
+    void checkScore();
     
     friend class Bomb;
     friend class Car;
@@ -57,6 +58,7 @@ class MainWindow: public QWidget{
     int myMoonTime; bool myMoonStatus;
     int myGirlTime; bool myCarStatus;
     int myStarTime;
+    bool checkCar;
     
     QGraphicsView *view;
     QGraphicsScene *scene;
@@ -69,7 +71,8 @@ class MainWindow: public QWidget{
     QLineEdit *username;
     QGraphicsSimpleTextItem *life;
     QGraphicsSimpleTextItem *score;
-    QGraphicsSimpleTextItem *lifecount;
+    QGraphicsSimpleTextItem *lifeN;
+    QGraphicsSimpleTextItem *scoreN;
     QString *name;
     QPushButton *Pause;
     

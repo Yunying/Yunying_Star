@@ -11,7 +11,7 @@ void MainWindow::show(){
 
 MainWindow::MainWindow(){
   //Some Initialization
-  lifeNum = 0;
+  lifeNum = 3;
   scoreNum = 0;
   myBombTime = 0;
   myMoonTime = 0;
@@ -21,6 +21,9 @@ MainWindow::MainWindow(){
   myMoonStatus = false;
   myCarStatus = false;
   setFocus();
+  
+  //Music
+  
 
   //View
   scene = new QGraphicsScene();
@@ -73,6 +76,11 @@ MainWindow::MainWindow(){
 MainWindow::~MainWindow(){}
 
 void MainWindow::handleStart(){
+  //Some Initialization
+  lifeNum = 3;
+  scoreNum = 500;
+  checkCar = false;
+  
   //Check if the user has entered a username
   if (username->isModified() == false){
     QMessageBox errorBox(QMessageBox::NoIcon, "ERROR", "Please enter a username!");
@@ -98,6 +106,12 @@ void MainWindow::handleStart(){
   life->setBrush(whiteBrush);
   life->setPos(30, 20);
   gamescene->addItem(life);
+  //Life Number
+  lifeN = new QGraphicsSimpleTextItem(toStr(lifeNum).c_str());
+  lifeN->setFont(QFont("Helvatica", 20, 40, 40));
+  lifeN->setBrush(whiteBrush);
+  lifeN->setPos(100, 20);
+  gamescene->addItem(lifeN);
   
   //Set Score (INITIALIZATION)
   score = new QGraphicsSimpleTextItem("Score:");
@@ -105,6 +119,12 @@ void MainWindow::handleStart(){
   score->setBrush(whiteBrush);
   score->setPos(190, 20);
   gamescene->addItem(score);
+  //Score Number
+  scoreN = new QGraphicsSimpleTextItem (toStr(scoreNum).c_str());
+  scoreN->setFont(QFont("Helvatica",20,40,40));
+  scoreN->setBrush(whiteBrush);
+  scoreN->setPos(290, 20);
+  gamescene->addItem(scoreN);
   
   //Set Pause Button
   QPixmap pauseImage("./Pause.png");
@@ -183,12 +203,27 @@ void MainWindow::handleBombTimer(){
   
   //Bomb Disappear
   if (myBombTime >= 400){
-    gamescene->removeItem(myBomb);
-    bomb_move_timer->stop();
-    delete bomb_move_timer;
-    delete myBomb;
-    myBombTime = 0;
-    myBombStatus = false;
+    if (myBombTime > 490){
+      gamescene->removeItem(myBomb);
+      bomb_move_timer->stop();
+      delete bomb_move_timer;
+      delete myBomb;
+      myBombTime = 0;
+      myBombStatus = false;
+    }
+    
+    else {
+      gamescene->removeItem(myBomb);
+      bomb_move_timer->stop();
+      delete bomb_move_timer;
+      delete myBomb;
+      myBombTime = 0;
+      myBombStatus = false;
+      
+      lifeNum --;
+      checkLife();
+      
+    }
   }
 }
 
@@ -205,6 +240,12 @@ void MainWindow::handleCarShowTimer(){
 
 void MainWindow::handleCarTimer(){
   myCar->move();
+  if (myCar->collidesWithItem(myGirl) && checkCar == false){
+    scoreNum = scoreNum - 300;
+    checkScore();
+    checkCar = true;
+  }
+    
   
   if (myCar->carStatus){
     gamescene->removeItem(myCar);
@@ -212,6 +253,7 @@ void MainWindow::handleCarTimer(){
     delete car_move_timer;
     delete myCar;
     myCarStatus = false;
+    checkCar = false;
   }
 }
 
@@ -379,5 +421,34 @@ void MainWindow::handlePause(){
 
 }     
   
+void MainWindow::checkLife(){
+  if (lifeNum == 0){
+    lifeN->setText(toStr(lifeNum).c_str());
+    QMessageBox errorBox(QMessageBox::NoIcon, "GAME OVER", "GAME OVER! Click OK to Start Again");
+    errorBox.exec();
+    handlePause();
+    stars.clear();
+    view->setScene(scene);
+    return;
+  }
+  else {
+    lifeN->setText(toStr(lifeNum).c_str());
+  }
+  
+}
+    
+void MainWindow::checkScore(){
+  if (scoreNum < 0){
+    scoreNum = 0;
+    scoreN -> setText(toStr(scoreNum).c_str());
+    lifeNum --;
+    checkLife();
+  }
+  else {
+    scoreN -> setText(toStr(scoreNum).c_str());
+  }
+}
+
+
 
 
