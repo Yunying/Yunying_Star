@@ -19,7 +19,6 @@ Car::Car(QPixmap& carImage,int nv):
 
 void Car::move(){
   x = x+v;
-  
   if ((x+width) > 1020){
     carStatus = true;
     return;
