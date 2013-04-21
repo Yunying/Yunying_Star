@@ -8,14 +8,17 @@ class Star : public QGraphicsPixmapItem{
   public:
     Star();
     ~Star();
-    Star(QPixmap& myStar, int, int);
+    Star(QPixmap& myStar, int, int, int);
     void move();
     bool inscreen;
+    
+    friend class MainWindow;
     
   private:
     int x;
     int y;
     int vy;
+    int color;
     
 };
 

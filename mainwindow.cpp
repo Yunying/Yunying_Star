@@ -377,26 +377,36 @@ void MainWindow::handleStarTimer(){
   QPixmap redStar("./redStar.png");
   QPixmap yellowStar("./yellowStar.png");
   QPixmap blueStar("./blueStar.png");
+  QPixmap evilStar("./evilStar.png");
   
   if (myStarTime == 50){
     int sx = rand() % 960+10;
     int svy = rand() % 3+1;
-    int color = rand() % 4;
+    int tm = rand() % 100;
+    int color;
+    if (tm > 50){
+      color = rand() % 5;
+    }
+    else {color = rand() % 4;}
     switch(color){
       case 0:
-        stars.push_back(new Star(greenStar, sx, svy));
+        stars.push_back(new Star(greenStar, sx, svy, 0));
         break;
       
       case 1:
-        stars.push_back(new Star(redStar, sx, svy));
+        stars.push_back(new Star(redStar, sx, svy, 1));
         break;
         
       case 2:
-        stars.push_back(new Star(yellowStar, sx, svy));
+        stars.push_back(new Star(yellowStar, sx, svy, 2));
         break;
       
       case 3:
-        stars.push_back(new Star(blueStar, sx, svy));
+        stars.push_back(new Star(blueStar, sx, svy, 3));
+        break;
+        
+      case 4:
+        stars.push_back(new Star(evilStar, sx, svy, 4));
         break;
      }
      
@@ -451,15 +461,7 @@ void MainWindow::checkLife(){
     errorBox.exec();
     handlePause();
     stars.clear();
-    if (myCarStatus){
-	  delete myCar;
-	}
-	if (myBombStatus){
-	  delete myBomb;
-	}
-	if (myMoonStatus){
-	  delete myMoon;
-	}
+
     view->setScene(scene);
     return;
   }
@@ -482,10 +484,15 @@ void MainWindow::checkScore(){
 }
 
 void MainWindow::checkStar(Star* star){
-  //Still need to add green Star condition
+  //Still need to add Evil Star condition
   if (star->collidesWithItem(myGirl)){
     star->inscreen = false;
-    scoreNum += 20;
+    if (star->color != 4){
+      scoreNum += 20;
+    }
+    else {
+      scoreNum -= 10;
+    }
     checkScore();
   }
 }
