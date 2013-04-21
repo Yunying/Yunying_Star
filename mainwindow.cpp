@@ -88,6 +88,7 @@ void MainWindow::handleStart(){
   myMoonTime = 0;
   myGirlTime = 0;
   myStarTime = 0;
+  level = 1;
   setFocus();
   
   //Check if the user has entered a username
@@ -150,7 +151,7 @@ void MainWindow::handleStart(){
   //Bomb
   bomb_show_timer = new QTimer(this);
   connect(bomb_show_timer, SIGNAL(timeout()), this, SLOT(handleBombShowTimer()));
-  bomb_show_timer->start(10000);
+  bomb_show_timer->start(15000);
   
   //Dropping Stars
   star_show_timer = new QTimer(this);
@@ -167,7 +168,7 @@ void MainWindow::handleStart(){
   //Moon
   moon_show_timer = new QTimer(this);
   connect(moon_show_timer, SIGNAL(timeout()), this, SLOT(handleMoonShowTimer()));
-  moon_show_timer->start(13000);
+  moon_show_timer->start(18000);
 
   
   //Girl
@@ -176,11 +177,6 @@ void MainWindow::handleStart(){
   gamescene->addItem(myGirl);
   girl_timer = new QTimer(this);
   connect(girl_timer, SIGNAL(timeout()), this, SLOT(handleGirlTimer()));
-
-  
-  //Score increase/decrease
-  
-  //Life
 
 }
 
@@ -194,15 +190,19 @@ void MainWindow::handleBombShowTimer(){
   QPixmap bombImage("./Bomb.png");
   int coX = rand() % 300;
   int coY = rand() % 300;
-  int Vx = rand() % 3+2;
-  int Vy = rand() % 3+2;
+  int Vx = rand() % 2+1;
+  int Vy = rand() % 2+1;
+  if (level != 1){
+    Vx = Vx+level;
+    Vy = Vy+level;
+  }
   myBombStatus = true;
   
   myBomb = new Bomb(bombImage, coX, coY, Vx, Vy, this);
   bomb_move_timer = new QTimer(this);
   gamescene->addItem(myBomb);
   connect(bomb_move_timer, SIGNAL(timeout()), this, SLOT(handleBombTimer()));
-  bomb_move_timer->start(10);
+  bomb_move_timer->start(20);
 }
   
 
@@ -238,7 +238,8 @@ void MainWindow::handleBombTimer(){
 
 void MainWindow::handleCarShowTimer(){
   QPixmap carImage("./Car.png");
-  myCar = new Car(carImage, 5);
+  int carV = 3+level*2;
+  myCar = new Car(carImage, carV);
   myCarStatus = true;
 
   gamescene->addItem(myCar);
@@ -372,19 +373,18 @@ void MainWindow::handleStarTimer(){
     }
   }
   
-  
   QPixmap greenStar("./greenStar.png");
   QPixmap redStar("./redStar.png");
   QPixmap yellowStar("./yellowStar.png");
   QPixmap blueStar("./blueStar.png");
   QPixmap evilStar("./evilStar.png");
   
-  if (myStarTime == 50){
+  if (myStarTime == 40){
     int sx = rand() % 960+10;
     int svy = rand() % 3+1;
-    int tm = rand() % 100;
+    int tm = rand() % (80 + 20*level);
     int color;
-    if (tm > 50){
+    if (tm > 70){
       color = rand() % 5;
     }
     else {color = rand() % 4;}
@@ -481,6 +481,17 @@ void MainWindow::checkScore(){
   else {
     scoreN -> setText(toStr(scoreNum).c_str());
   }
+  if (scoreNum < 2000){
+    level = 1;
+  }
+  if (scoreNum >= 2000){
+    level = 2;
+  }
+  
+  if (scoreNum > 5000){
+    level = 3;
+  }
+  
 }
 
 void MainWindow::checkStar(Star* star){

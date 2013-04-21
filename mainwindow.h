@@ -61,6 +61,7 @@ class MainWindow: public QWidget{
     int myStarTime;
     bool checkCar;
     bool checkMoon;
+    int level;
     
     QGraphicsView *view;
     QGraphicsScene *scene;
