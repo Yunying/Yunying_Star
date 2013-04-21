@@ -47,6 +47,7 @@ class MainWindow: public QWidget{
     void girlAction();
     void checkLife();
     void checkScore();
+    void checkStar(Star*);
     
     friend class Bomb;
     friend class Car;

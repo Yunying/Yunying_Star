@@ -78,7 +78,7 @@ MainWindow::~MainWindow(){}
 void MainWindow::handleStart(){
   //Some Initialization
   lifeNum = 3;
-  scoreNum = 500;
+  scoreNum = 0;
   checkCar = false;
   checkMoon = false;
   myBombStatus = false;
@@ -88,6 +88,7 @@ void MainWindow::handleStart(){
   myMoonTime = 0;
   myGirlTime = 0;
   myStarTime = 0;
+  setFocus();
   
   //Check if the user has entered a username
   if (username->isModified() == false){
@@ -278,7 +279,7 @@ void MainWindow::handleMoonShowTimer(){
 
 void MainWindow::handleMoonTimer(){
   myMoonTime++;
-  if (myMoon->collidesWithItem(myGirl) && checkMoon = false){
+  if (myMoon->collidesWithItem(myGirl) && checkMoon == false){
     checkMoon = true;
     myMoonTime = 550;
     lifeNum++;
@@ -361,6 +362,7 @@ void MainWindow::handleStarTimer(){
   while (starCount < stars.size()){
     if (stars[starCount]->inscreen){
       stars[starCount]->move();
+      checkStar(stars[starCount]);
       starCount++;
     }
     
@@ -439,7 +441,7 @@ void MainWindow::handlePause(){
 void MainWindow::checkLife(){
   if (lifeNum > 3){
     lifeNum = 3;
-    scoreNum = score+1000;
+    scoreNum = scoreNum+1000;
     checkScore();
   }
   
@@ -449,6 +451,15 @@ void MainWindow::checkLife(){
     errorBox.exec();
     handlePause();
     stars.clear();
+    if (myCarStatus){
+	  delete myCar;
+	}
+	if (myBombStatus){
+	  delete myBomb;
+	}
+	if (myMoonStatus){
+	  delete myMoon;
+	}
     view->setScene(scene);
     return;
   }
@@ -470,6 +481,13 @@ void MainWindow::checkScore(){
   }
 }
 
-
+void MainWindow::checkStar(Star* star){
+  //Still need to add green Star condition
+  if (star->collidesWithItem(myGirl)){
+    star->inscreen = false;
+    scoreNum += 20;
+    checkScore();
+  }
+}
 
 

@@ -17,7 +17,7 @@ Star::Star(QPixmap& starImage, int sx, int svy) : QGraphicsPixmapItem(starImage)
 
 void Star::move(){
   y += vy;
-  if (y > 500){
+  if (y > 530){
     inscreen = false;
     return;
   }
