@@ -53,9 +53,9 @@ class MainWindow: public QWidget{
   private:
     int lifeNum;
     int scoreNum;
-    int myBombTime;
-    int myMoonTime;
-    int myGirlTime;
+    int myBombTime; bool myBombStatus;
+    int myMoonTime; bool myMoonStatus;
+    int myGirlTime; bool myCarStatus;
     int myStarTime;
     
     QGraphicsView *view;
@@ -101,6 +101,7 @@ class MainWindow: public QWidget{
     void handleMoonTimer();
     void handleGirlTimer();
     void handleStarTimer();
+    void handlePause();
     void keyPressEvent(QKeyEvent *event);
 };
 

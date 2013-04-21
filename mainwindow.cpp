@@ -17,6 +17,9 @@ MainWindow::MainWindow(){
   myMoonTime = 0;
   myGirlTime = 0;
   myStarTime = 0;
+  myBombStatus = false;
+  myMoonStatus = false;
+  myCarStatus = false;
   setFocus();
 
   //View
@@ -113,6 +116,7 @@ void MainWindow::handleStart(){
   Pause->setAutoFillBackground(true);
   Pause->setPalette(PausePalette);
   gamescene->addWidget(Pause);
+  connect(Pause, SIGNAL(clicked()), this, SLOT(handlePause()));
   
   //Bomb
   bomb_show_timer = new QTimer(this);
@@ -163,6 +167,7 @@ void MainWindow::handleBombShowTimer(){
   int coY = rand() % 300;
   int Vx = rand() % 3+2;
   int Vy = rand() % 3+2;
+  myBombStatus = true;
   
   myBomb = new Bomb(bombImage, coX, coY, Vx, Vy, this);
   bomb_move_timer = new QTimer(this);
@@ -177,18 +182,20 @@ void MainWindow::handleBombTimer(){
   myBombTime++;
   
   //Bomb Disappear
-  if (myBombTime == 400){
+  if (myBombTime >= 400){
     gamescene->removeItem(myBomb);
     bomb_move_timer->stop();
     delete bomb_move_timer;
     delete myBomb;
     myBombTime = 0;
+    myBombStatus = false;
   }
 }
 
 void MainWindow::handleCarShowTimer(){
   QPixmap carImage("./Car.png");
   myCar = new Car(carImage, 5);
+  myCarStatus = true;
 
   gamescene->addItem(myCar);
   car_move_timer = new QTimer(this);
@@ -204,11 +211,13 @@ void MainWindow::handleCarTimer(){
     car_move_timer->stop();
     delete car_move_timer;
     delete myCar;
+    myCarStatus = false;
   }
 }
 
 void MainWindow::handleMoonShowTimer(){
   QPixmap moonImage("./Moon.png");
+  myMoonStatus = true;
   int ran = rand() % 700+100;
   myMoon = new Moon(moonImage, ran);
   gamescene->addItem(myMoon);
@@ -237,6 +246,7 @@ void MainWindow::handleMoonTimer(){
     delete moon_move_timer;
     delete myMoon;
     myMoonTime = 0;
+    myMoonStatus = false;
   }
 }
   
@@ -309,8 +319,8 @@ void MainWindow::handleStarTimer(){
   QPixmap yellowStar("./yellowStar.png");
   QPixmap blueStar("./blueStar.png");
   
-  if (myStarTime == 100){
-    int sx = rand() % 900+50;
+  if (myStarTime == 50){
+    int sx = rand() % 960+10;
     int svy = rand() % 3+1;
     int color = rand() % 4;
     switch(color){
@@ -335,7 +345,39 @@ void MainWindow::handleStarTimer(){
      myStarTime = 0;
   }
 }
-      
+
+void MainWindow::handlePause(){
+
+  if (star_show_timer->isActive()) {
+	star_show_timer->stop();
+	bomb_show_timer->stop();
+	moon_show_timer->stop();
+	car_show_timer->stop();
+	if (myCarStatus){
+	  car_move_timer->stop();
+	}
+	if (myBombStatus){
+	  bomb_move_timer->stop();
+	}
+	if (myMoonStatus){
+	  myMoonTime = 550;
+	}
+	
+  }
+  else {
+	star_show_timer->start();
+	bomb_show_timer->start();
+	moon_show_timer->start();
+	car_show_timer->start();
+	if (myCarStatus){
+	  car_move_timer->start();
+	}
+	if (myBombStatus){
+	  bomb_move_timer->start();
+	}
+  }
+
+}     
   
 
 
