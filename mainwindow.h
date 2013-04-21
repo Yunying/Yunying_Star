@@ -79,6 +79,10 @@ class MainWindow: public QWidget{
     QString *name;
     QPushButton *Pause;
     QPushButton *quit;
+    QPushButton *Instructions;
+    QPushButton *back;
+    QPixmap *Instruct;
+    QGraphicsPixmapItem *InsImage;
     
     QTimer *bomb_show_timer;
     QTimer *bomb_move_timer;
@@ -110,6 +114,8 @@ class MainWindow: public QWidget{
     void handleStarTimer();
     void handlePause();
     void handleQuit();
+    void handleIns();
+    void handleBack();
     void keyPressEvent(QKeyEvent *event);
 };
 

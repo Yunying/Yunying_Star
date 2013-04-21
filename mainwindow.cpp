@@ -64,12 +64,25 @@ MainWindow::MainWindow(){
   username->setGeometry(455, 370, 200, 40);
   scene->addWidget(username);
   
+  //Instructions
+  QPixmap insImage("./Information.png");
+  Instructions = new QPushButton();
+  Instructions->setGeometry(570, 446, 60, 40);
+  QPalette InsPalette;
+  InsPalette.setBrush(Instructions->backgroundRole(), QBrush(insImage));
+  Instructions->setFlat(true);
+  Instructions->setAutoFillBackground(true);
+  Instructions->setPalette(InsPalette);
+  scene->addWidget(Instructions);
+  Instruct = new QPixmap("./Instructions.png");
+  InsImage = new QGraphicsPixmapItem(*Instruct);
+  connect(Instructions, SIGNAL(clicked()), this, SLOT(handleIns()));
+  
   //Start Button
   start = new QPushButton("START");
   start->setFont(QFont("Helvatica", 23, 40));
   start->setGeometry(400, 435, 150, 50);
   scene->addWidget(start);
-  
   connect(start, SIGNAL(clicked()), this, SLOT(handleStart()));
 }
 
@@ -524,5 +537,18 @@ void MainWindow::handleQuit(){
   QApplication::quit();
 }
 
+void MainWindow::handleIns(){
+  
+  scene->addItem(InsImage);
+  back = new QPushButton("Back");
+  back->setFont(QFont("Helvatica", 23, 40));
+  back->setGeometry(800, 550, 120, 60);
+  scene->addWidget(back);
+  connect(back, SIGNAL(clicked()), this, SLOT(handleBack()));
+}
 
+void MainWindow::handleBack(){
+  back->hide();
+  scene->removeItem(InsImage);
+}
 
