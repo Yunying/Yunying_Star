@@ -80,6 +80,14 @@ void MainWindow::handleStart(){
   lifeNum = 3;
   scoreNum = 500;
   checkCar = false;
+  checkMoon = false;
+  myBombStatus = false;
+  myMoonStatus = false;
+  myCarStatus = false;
+  myBombTime = 0;
+  myMoonTime = 0;
+  myGirlTime = 0;
+  myStarTime = 0;
   
   //Check if the user has entered a username
   if (username->isModified() == false){
@@ -270,6 +278,12 @@ void MainWindow::handleMoonShowTimer(){
 
 void MainWindow::handleMoonTimer(){
   myMoonTime++;
+  if (myMoon->collidesWithItem(myGirl) && checkMoon = false){
+    checkMoon = true;
+    myMoonTime = 550;
+    lifeNum++;
+    checkLife();
+  }
   
   if (myMoonTime <= 200){
     myMoon->come();
@@ -289,6 +303,7 @@ void MainWindow::handleMoonTimer(){
     delete myMoon;
     myMoonTime = 0;
     myMoonStatus = false;
+    checkMoon = false;
   }
 }
   
@@ -422,6 +437,12 @@ void MainWindow::handlePause(){
 }     
   
 void MainWindow::checkLife(){
+  if (lifeNum > 3){
+    lifeNum = 3;
+    scoreNum = score+1000;
+    checkScore();
+  }
+  
   if (lifeNum == 0){
     lifeN->setText(toStr(lifeNum).c_str());
     QMessageBox errorBox(QMessageBox::NoIcon, "GAME OVER", "GAME OVER! Click OK to Start Again");
