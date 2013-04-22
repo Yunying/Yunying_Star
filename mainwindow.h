@@ -76,6 +76,8 @@ class MainWindow: public QWidget{
     QGraphicsSimpleTextItem *score;
     QGraphicsSimpleTextItem *lifeN;
     QGraphicsSimpleTextItem *scoreN;
+    QGraphicsSimpleTextItem *user;
+    QGraphicsSimpleTextItem *userN;
     QString *name;
     QPushButton *Pause;
     QPushButton *quit;

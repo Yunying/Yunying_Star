@@ -20,10 +20,6 @@ MainWindow::MainWindow(){
   myBombStatus = false;
   myMoonStatus = false;
   myCarStatus = false;
-  setFocus();
-  
-  //Music
-  
 
   //View
   scene = new QGraphicsScene();
@@ -34,6 +30,7 @@ MainWindow::MainWindow(){
   //SetBackground
   QPixmap night("./night.jpg");
   scene->addPixmap(night);
+
   
   //Twinkle
   twinkle = new QGraphicsSimpleTextItem("Twinkle Twinkle");
@@ -89,6 +86,7 @@ MainWindow::MainWindow(){
 MainWindow::~MainWindow(){}
 
 void MainWindow::handleStart(){
+
   //Some Initialization
   lifeNum = 3;
   scoreNum = 0;
@@ -102,7 +100,6 @@ void MainWindow::handleStart(){
   myGirlTime = 0;
   myStarTime = 0;
   level = 1;
-  setFocus();
   
   //Check if the user has entered a username
   if (username->isModified() == false){
@@ -122,7 +119,6 @@ void MainWindow::handleStart(){
   view->setScene(gamescene);
   gamescene->addPixmap(gamenight);
 
-  
   //Set Life (INITIALIZATION)
   life = new QGraphicsSimpleTextItem("Life:");
   life->setFont(QFont("Helvatica", 18, 50));
@@ -149,6 +145,20 @@ void MainWindow::handleStart(){
   scoreN->setPos(290, 20);
   gamescene->addItem(scoreN);
   
+  //Set User
+  user = new QGraphicsSimpleTextItem("User:");
+  user->setFont(QFont("Helvatica", 18, 50));
+  user->setBrush(whiteBrush);
+  user->setPos(390, 20);
+  gamescene->addItem(user);
+  //UserName
+  userN = new QGraphicsSimpleTextItem ();
+  userN->setText(username->text());
+  userN->setFont(QFont("Helvatica",20,40,40));
+  userN->setBrush(whiteBrush);
+  userN->setPos(470, 20);
+  gamescene->addItem(userN);
+  
   //Set Pause Button
   QPixmap pauseImage("./Pause.png");
   Pause = new QPushButton();
@@ -174,24 +184,24 @@ void MainWindow::handleStart(){
   connect(quit, SIGNAL(clicked()), this, SLOT(handleQuit()));
   
   //Bomb
-  bomb_show_timer = new QTimer(this);
+  bomb_show_timer = new QTimer();
   connect(bomb_show_timer, SIGNAL(timeout()), this, SLOT(handleBombShowTimer()));
   bomb_show_timer->start(15000);
   
   //Dropping Stars
-  star_show_timer = new QTimer(this);
+  star_show_timer = new QTimer();
   connect(star_show_timer, SIGNAL(timeout()), this, SLOT(handleStarTimer()));
   star_show_timer -> start(10);
   
   
   //Appear Car
-  car_show_timer = new QTimer(this);
+  car_show_timer = new QTimer();
   connect(car_show_timer, SIGNAL(timeout()), this, SLOT(handleCarShowTimer()));
   car_show_timer->start(10000);
   
   
   //Moon
-  moon_show_timer = new QTimer(this);
+  moon_show_timer = new QTimer();
   connect(moon_show_timer, SIGNAL(timeout()), this, SLOT(handleMoonShowTimer()));
   moon_show_timer->start(18000);
 
@@ -200,8 +210,18 @@ void MainWindow::handleStart(){
   QPixmap girlImage("./Girl.png");
   myGirl = new Girl(girlImage);
   gamescene->addItem(myGirl);
-  girl_timer = new QTimer(this);
+  girl_timer = new QTimer();
   connect(girl_timer, SIGNAL(timeout()), this, SLOT(handleGirlTimer()));
+  
+  //Focus Things
+  //gamescene->clearFocus();
+  gamescene->setFocusItem(myGirl);
+  myGirl->setFocus();
+  setFocus();
+  cout << hasFocus() << endl;
+  cout << gamescene->hasFocus() << endl;
+  cout << myGirl->hasFocus() << endl;
+  cout << gamescene->focusItem() << endl;
 
 }
 
@@ -224,7 +244,7 @@ void MainWindow::handleBombShowTimer(){
   myBombStatus = true;
   
   myBomb = new Bomb(bombImage, coX, coY, Vx, Vy, this);
-  bomb_move_timer = new QTimer(this);
+  bomb_move_timer = new QTimer();
   gamescene->addItem(myBomb);
   connect(bomb_move_timer, SIGNAL(timeout()), this, SLOT(handleBombTimer()));
   bomb_move_timer->start(20);
@@ -268,7 +288,7 @@ void MainWindow::handleCarShowTimer(){
   myCarStatus = true;
 
   gamescene->addItem(myCar);
-  car_move_timer = new QTimer(this);
+  car_move_timer = new QTimer();
   connect(car_move_timer, SIGNAL(timeout()), this, SLOT(handleCarTimer()));
   car_move_timer->start(10);
 }
@@ -298,7 +318,7 @@ void MainWindow::handleMoonShowTimer(){
   int ran = rand() % 700+100;
   myMoon = new Moon(moonImage, ran);
   gamescene->addItem(myMoon);
-  moon_move_timer = new QTimer(this);
+  moon_move_timer = new QTimer();
   connect(moon_move_timer, SIGNAL(timeout()), this, SLOT(handleMoonTimer()));
   moon_move_timer->start(20);
 }
@@ -342,9 +362,6 @@ void MainWindow::keyPressEvent(QKeyEvent *e) {
       break;
     case Qt::Key_Right:
       myGirl->moveRight();
-      break;
-    case Qt::Key_Escape:
-      QApplication::quit();
       break;
     case Qt::Key_Space:
       girlAction();
