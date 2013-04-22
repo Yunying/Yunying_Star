@@ -128,6 +128,15 @@ void MainWindow::handleStart(){
   myGirlTime = 0;
   myStarTime = 0;
   level = 1;
+  greenStar = new QPixmap("./greenStar.png");
+  redStar = new QPixmap ("./redStar.png");
+  yellowStar = new QPixmap ("./yellowStar.png");
+  blueStar = new QPixmap ("./blueStar.png");
+  evilStar = new QPixmap ("./evilStar.png");
+  moonImage = new QPixmap("./Moon.png");
+  bombImage = new QPixmap("./Bomb.png");
+  carImage = new QPixmap("./Car.png");
+  
   
   //Check if the user has entered a username
   if (username->isModified() == false){
@@ -173,6 +182,7 @@ void MainWindow::handleStart(){
   scoreN->setPos(290, 20);
   gamescene->addItem(scoreN);
   
+  
   //Set User
   user = new QGraphicsSimpleTextItem("User:");
   user->setFont(QFont("Helvatica", 18, 50));
@@ -186,6 +196,19 @@ void MainWindow::handleStart(){
   userN->setBrush(whiteBrush);
   userN->setPos(470, 20);
   gamescene->addItem(userN);
+  
+  //Set Level
+  levelT = new QGraphicsSimpleTextItem("Level:");
+  levelT->setFont(QFont("Helvatica", 18, 50));
+  levelT->setBrush(whiteBrush);
+  levelT->setPos(610, 20);
+  gamescene->addItem(levelT);
+  //Level
+  levelN = new QGraphicsSimpleTextItem (toStr(level).c_str());
+  levelN->setFont(QFont("Helvatica",20,40,40));
+  levelN->setBrush(whiteBrush);
+  levelN->setPos(710, 20);
+  gamescene->addItem(levelN);
   
   //Set Pause Button
   QPixmap pauseImage("./Pause.png");
@@ -231,7 +254,7 @@ void MainWindow::handleStart(){
   //Moon
   moon_show_timer = new QTimer();
   connect(moon_show_timer, SIGNAL(timeout()), this, SLOT(handleMoonShowTimer()));
-  moon_show_timer->start(18000);
+  moon_show_timer->start(30000);
 
   
   //Girl
@@ -241,8 +264,6 @@ void MainWindow::handleStart(){
   girl_timer = new QTimer();
   connect(girl_timer, SIGNAL(timeout()), this, SLOT(handleGirlTimer()));
   
-  //Focus Things
-  //gamescene->setFocusItem(myGirl);
   setFocus();
 }
 
@@ -253,19 +274,17 @@ string MainWindow::toStr(int num){
 }
 
 void MainWindow::handleBombShowTimer(){
-
-  QPixmap bombImage("./Bomb.png");
   int coX = rand() % 300;
   int coY = rand() % 300;
-  int Vx = rand() % 2+1;
-  int Vy = rand() % 2+1;
+  int Vx = rand() % 3+1;
+  int Vy = rand() % 3+1;
   if (level != 1){
-    Vx = Vx+level;
-    Vy = Vy+level;
+    Vx = Vx+2*level;
+    Vy = Vy+2*level;
   }
   myBombStatus = true;
   
-  myBomb = new Bomb(bombImage, coX, coY, Vx, Vy);
+  myBomb = new Bomb(*bombImage, coX, coY, Vx, Vy);
   bomb_move_timer = new QTimer();
   gamescene->addItem(myBomb);
   connect(bomb_move_timer, SIGNAL(timeout()), this, SLOT(handleBombTimer()));
@@ -308,9 +327,9 @@ void MainWindow::handleBombTimer(){
 }
 
 void MainWindow::handleCarShowTimer(){
-  QPixmap carImage("./Car.png");
+  
   int carV = 3+level*2;
-  myCar = new Car(carImage, carV);
+  myCar = new Car(*carImage, carV);
   myCarStatus = true;
 
   gamescene->addItem(myCar);
@@ -322,7 +341,7 @@ void MainWindow::handleCarShowTimer(){
 void MainWindow::handleCarTimer(){
   myCar->move();
   if (myCar->collidesWithItem(myGirl) && checkCar == false){
-    scoreNum = scoreNum - 300;
+    scoreNum = scoreNum - 200;
     checkScore();
     checkCar = true;
   }
@@ -339,14 +358,14 @@ void MainWindow::handleCarTimer(){
 }
 
 void MainWindow::handleMoonShowTimer(){
-  QPixmap moonImage("./Moon.png");
+  
   myMoonStatus = true;
   int ran = rand() % 700+100;
-  myMoon = new Moon(moonImage, ran);
+  myMoon = new Moon(*moonImage, ran);
   gamescene->addItem(myMoon);
   moon_move_timer = new QTimer();
   connect(moon_move_timer, SIGNAL(timeout()), this, SLOT(handleMoonTimer()));
-  moon_move_timer->start(20);
+  moon_move_timer->start(10+level*10);
 }
 
 void MainWindow::handleMoonTimer(){
@@ -436,13 +455,8 @@ void MainWindow::handleStarTimer(){
     }
   }
   
-  QPixmap greenStar("./greenStar.png");
-  QPixmap redStar("./redStar.png");
-  QPixmap yellowStar("./yellowStar.png");
-  QPixmap blueStar("./blueStar.png");
-  QPixmap evilStar("./evilStar.png");
-  
-  if (myStarTime == 40){
+
+  if (myStarTime == 27 + 10*level){
     int sx = rand() % 960+10;
     int svy = rand() % 3+1;
     int tm = rand() % (80 + 20*level);
@@ -453,23 +467,23 @@ void MainWindow::handleStarTimer(){
     else {color = rand() % 4;}
     switch(color){
       case 0:
-        stars.push_back(new Star(greenStar, sx, svy, 0));
+        stars.push_back(new Star(*greenStar, sx, svy, 0));
         break;
       
       case 1:
-        stars.push_back(new Star(redStar, sx, svy, 1));
+        stars.push_back(new Star(*redStar, sx, svy, 1));
         break;
         
       case 2:
-        stars.push_back(new Star(yellowStar, sx, svy, 2));
+        stars.push_back(new Star(*yellowStar, sx, svy, 2));
         break;
       
       case 3:
-        stars.push_back(new Star(blueStar, sx, svy, 3));
+        stars.push_back(new Star(*blueStar, sx, svy, 3));
         break;
         
       case 4:
-        stars.push_back(new Star(evilStar, sx, svy, 4));
+        stars.push_back(new Star(*evilStar, sx, svy, 4));
         break;
      }
      
@@ -514,7 +528,7 @@ void MainWindow::handlePause(){
 void MainWindow::checkLife(){
   if (lifeNum > 3){
     lifeNum = 3;
-    scoreNum = scoreNum+1000;
+    scoreNum = scoreNum+1000-level*100;
     checkScore();
   }
   
@@ -546,15 +560,21 @@ void MainWindow::checkScore(){
   }
   if (scoreNum < 2000){
     level = 1;
+    levelN -> setText(toStr(level).c_str());
   }
   if (scoreNum >= 2000){
     level = 2;
+    levelN -> setText(toStr(level).c_str());
   }
   
   if (scoreNum > 5000){
     level = 3;
+    levelN -> setText(toStr(level).c_str());
   }
-  
+  if (scoreNum > 10000){
+    level = 4;
+    levelN -> setText(toStr(level).c_str());
+  }
 }
 
 void MainWindow::checkStar(Star* star){

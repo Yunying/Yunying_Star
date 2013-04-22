@@ -85,6 +85,8 @@ class MainWindow: public QMainWindow{
     QGraphicsSimpleTextItem *scoreN;
     QGraphicsSimpleTextItem *user;
     QGraphicsSimpleTextItem *userN;
+    QGraphicsSimpleTextItem *levelT;
+    QGraphicsSimpleTextItem *levelN;
     QString *name;
     QPushButton *Pause;
     QPushButton *quit;
@@ -111,6 +113,16 @@ class MainWindow: public QMainWindow{
     
     vector<Star*> stars;
     QTimer *star_show_timer;
+    
+    QPixmap *greenStar;
+    QPixmap *blueStar;
+    QPixmap *redStar;
+    QPixmap *evilStar;
+    QPixmap *yellowStar;
+    QPixmap *moonImage;
+    QPixmap *carImage;
+    QPixmap *bombImage;
+  
   
   public slots:
     void handleStart();

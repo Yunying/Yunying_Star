@@ -1,5 +1,5 @@
 #include "bomb.h"
-#include "mainwindow.h"
+
 
 using namespace std;
 
@@ -8,7 +8,7 @@ Bomb::Bomb(){}
 Bomb::~Bomb(){}
 
 
-Bomb::Bomb(QPixmap& bombIma, int nx, int ny, int nvx, int nvy, MainWindow *mw) : 
+Bomb::Bomb(QPixmap& bombIma, int nx, int ny, int nvx, int nvy) : 
   QGraphicsPixmapItem(bombIma){
     x = nx;
     y = ny;
@@ -18,7 +18,7 @@ Bomb::Bomb(QPixmap& bombIma, int nx, int ny, int nvx, int nvy, MainWindow *mw) :
     vy = nvy;
     width = 100;
     height = 100;
-    window = mw;
+    bombClicked = false;
     
 }
 
@@ -52,7 +52,7 @@ void Bomb::move(int windowMaxX, int windowMaxY){
 
 void Bomb::mousePressEvent(QGraphicsSceneMouseEvent *event){
   event = event;
-  window->myBombTime = 500;
+  bombClicked = true;
   
 }
 

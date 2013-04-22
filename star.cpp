@@ -17,6 +17,7 @@ Star::Star(QPixmap& starImage, int sx, int svy, int rancolor) : QGraphicsPixmapI
   color = rancolor;
   if (color == 4){
     x = rand()%500+250;
+    vy = 2;
   }
 }
 
