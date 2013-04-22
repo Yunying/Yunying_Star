@@ -1,4 +1,5 @@
 #include "star.h"
+#include <iostream>
 
 using namespace std;
 
@@ -10,14 +11,26 @@ Star::Star(QPixmap& starImage, int sx, int svy, int rancolor) : QGraphicsPixmapI
   setZValue(1);
   x = sx;
   y = 0;
-  vy = svy;
+  vy = svy; vx = rand() % 5+2;
   setPos(x, y);
   inscreen = true;
   color = rancolor;
+  if (color == 4){
+    x = rand()%500+250;
+  }
 }
 
 void Star::move(){
-  y += vy;
+  if (color != 4){
+    y += vy;
+  }
+  else {
+    y += vy+1; 
+    if (x<200 || x>800){
+      vx = -vx;
+    }
+    x += vx;
+  }
   if (y > 530){
     inscreen = false;
     return;
