@@ -23,22 +23,26 @@
 #include <vector>
 #include <string>
 #include <sstream>
+#include <QMenuBar>
+#include <QAction>
 #include "bomb.h"
 #include "thing.h"
 #include "car.h"
 #include "moon.h"
 #include "girl.h"
 #include "star.h"
+#include <QMenu>
+
 
 using namespace std;
 
-class MainWindow: public QWidget{
+class MainWindow: public QMainWindow{
   Q_OBJECT
   
   public:
     explicit MainWindow();
     ~MainWindow();
-    void show();
+    //void show();
     
     string toStr(int);
     void add_life();
@@ -51,6 +55,7 @@ class MainWindow: public QWidget{
     
     friend class Bomb;
     friend class Car;
+    friend class GameScene;
     
   private:
     int lifeNum;
@@ -65,6 +70,8 @@ class MainWindow: public QWidget{
     
     QGraphicsView *view;
     QGraphicsScene *scene;
+    QMenuBar *mb;
+    QMenu *fileMenu;
     QGraphicsScene *gamescene;
     QMainWindow *window;
     QPushButton *start;
@@ -81,6 +88,7 @@ class MainWindow: public QWidget{
     QString *name;
     QPushButton *Pause;
     QPushButton *quit;
+    QPushButton *quit1;
     QPushButton *Instructions;
     QPushButton *back;
     QPixmap *Instruct;

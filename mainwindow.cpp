@@ -5,11 +5,13 @@ using namespace std;
 QBrush whiteBrush(Qt::white);
 QBrush blackBrush(Qt::black);
 
-void MainWindow::show(){
-  view->show();
-}
+
+//void MainWindow::show(){
+  //view->show();
+//}
 
 MainWindow::MainWindow(){
+  setFocusPolicy(Qt::StrongFocus);
   //Some Initialization
   lifeNum = 3;
   scoreNum = 0;
@@ -24,14 +26,25 @@ MainWindow::MainWindow(){
   //View
   scene = new QGraphicsScene();
   view = new QGraphicsView(scene);
+  setCentralWidget(view);
   view->setFixedSize(1030, 770);
-  view->setWindowTitle("Puzzle Game");
+  view->setWindowTitle("Star");
+  
+  //MenuBar
+  this->setWindowTitle("Star");
+  mb = new QMenuBar();
+  fileMenu = new QMenu("Star", this);
+  mb->addMenu(fileMenu);
+  QAction *exitAction = new QAction("Exit", this);
+  fileMenu->addAction(exitAction);
+  connect(exitAction, SIGNAL(triggered()), this, SLOT(handleQuit()));
+  setMenuBar(mb);
+  
   
   //SetBackground
   QPixmap night("./night.jpg");
   scene->addPixmap(night);
 
-  
   //Twinkle
   twinkle = new QGraphicsSimpleTextItem("Twinkle Twinkle");
   QFont *twinklefont = new QFont("Times", 45);
@@ -81,6 +94,21 @@ MainWindow::MainWindow(){
   start->setGeometry(400, 435, 150, 50);
   scene->addWidget(start);
   connect(start, SIGNAL(clicked()), this, SLOT(handleStart()));
+  
+  //Set Quit Button
+  QPixmap quitImage1("./Quit.png");
+  quit1 = new QPushButton();
+  quit1->setGeometry(950, 20, 55, 55);
+  QPalette quitPalette1;
+  quitPalette1.setBrush(quit1->backgroundRole(), QBrush(quitImage1));
+  quit1->setFlat(true);
+  quit1->setAutoFillBackground(true);
+  quit1->setPalette(quitPalette1);
+  scene->addWidget(quit1);
+  connect(quit1, SIGNAL(clicked()), this, SLOT(handleQuit()));
+  
+  view->show();
+  
 }
 
 MainWindow::~MainWindow(){}
@@ -214,15 +242,8 @@ void MainWindow::handleStart(){
   connect(girl_timer, SIGNAL(timeout()), this, SLOT(handleGirlTimer()));
   
   //Focus Things
-  //gamescene->clearFocus();
-  gamescene->setFocusItem(myGirl);
-  myGirl->setFocus();
+  //gamescene->setFocusItem(myGirl);
   setFocus();
-  cout << hasFocus() << endl;
-  cout << gamescene->hasFocus() << endl;
-  cout << myGirl->hasFocus() << endl;
-  cout << gamescene->focusItem() << endl;
-
 }
 
 string MainWindow::toStr(int num){
@@ -232,6 +253,7 @@ string MainWindow::toStr(int num){
 }
 
 void MainWindow::handleBombShowTimer(){
+
   QPixmap bombImage("./Bomb.png");
   int coX = rand() % 300;
   int coY = rand() % 300;
@@ -243,7 +265,7 @@ void MainWindow::handleBombShowTimer(){
   }
   myBombStatus = true;
   
-  myBomb = new Bomb(bombImage, coX, coY, Vx, Vy, this);
+  myBomb = new Bomb(bombImage, coX, coY, Vx, Vy);
   bomb_move_timer = new QTimer();
   gamescene->addItem(myBomb);
   connect(bomb_move_timer, SIGNAL(timeout()), this, SLOT(handleBombTimer()));
@@ -254,6 +276,9 @@ void MainWindow::handleBombShowTimer(){
 void MainWindow::handleBombTimer(){
   myBomb->move(1000, 760);
   myBombTime++;
+  if (myBomb->bombClicked){
+    myBombTime = 500;
+  }
   
   //Bomb Disappear
   if (myBombTime >= 400){
@@ -264,6 +289,7 @@ void MainWindow::handleBombTimer(){
       delete myBomb;
       myBombTime = 0;
       myBombStatus = false;
+      setFocus();
     }
     
     else {
@@ -355,7 +381,6 @@ void MainWindow::handleMoonTimer(){
 }
   
 void MainWindow::keyPressEvent(QKeyEvent *e) {
-  cout << "clicked" << endl;
   switch (e->key()){
     case Qt::Key_Left:
       myGirl->moveLeft();
@@ -366,26 +391,22 @@ void MainWindow::keyPressEvent(QKeyEvent *e) {
     case Qt::Key_Space:
       girlAction();
       break;
-    case Qt::Key_A:
-      cout << "Got you" << endl;
-      break;
+
   }
 }
 
 void MainWindow::handleGirlTimer(){
   myGirlTime++;
-  if (myGirlTime <= 100){
-  }
-  
-  else if (myGirlTime <= 125) {
+
+  if (myGirlTime <= 25) {
     myGirl->jumpU();
-    if (myGirlTime == 125){myGirl->vy = 0; }
+    if (myGirlTime == 25){myGirl->vy = 0; }
   }
 
   
-  else if (myGirlTime <= 150){
+  else if (myGirlTime <= 50){
     myGirl->jumpD();
-    if (myGirlTime == 150) {myGirl->vy = 10; }
+    if (myGirlTime == 50) {myGirl->vy = 10; }
   }
 
   else{
@@ -426,7 +447,7 @@ void MainWindow::handleStarTimer(){
     int svy = rand() % 3+1;
     int tm = rand() % (80 + 20*level);
     int color;
-    if (tm > 70){
+    if (tm > 80){
       color = rand() % 5;
     }
     else {color = rand() % 4;}
@@ -537,7 +558,6 @@ void MainWindow::checkScore(){
 }
 
 void MainWindow::checkStar(Star* star){
-  //Still need to add Evil Star condition
   if (star->collidesWithItem(myGirl)){
     star->inscreen = false;
     if (star->color != 4){

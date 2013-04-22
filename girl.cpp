@@ -13,7 +13,7 @@ Girl::Girl(QPixmap& girlImage) : QGraphicsPixmapItem(girlImage){
   x = 500;
   y = 500;
   vy = 10;
-  vx = 10;
+  vx = 15;
   width = 80;
 }
 
@@ -42,7 +42,4 @@ void Girl::jumpD(){
     }
 }
 
-
-  
-  
   

@@ -2,17 +2,15 @@
 #define BOMB_H_
 #include <QGraphicsPixmapItem>
 
-class MainWindow;
-
 using namespace std;
 
 class Bomb : public QGraphicsPixmapItem{
   public:
     Bomb();
     ~Bomb();
-    Bomb(QPixmap& bomb,int, int, int, int, MainWindow*);
+    Bomb(QPixmap& bomb,int, int, int, int);
     void move(int, int);
-    
+    bool bombClicked;
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
   
   private:
@@ -22,7 +20,6 @@ class Bomb : public QGraphicsPixmapItem{
     int vy;
     int width;
     int height;
-    MainWindow *window;
 };
 
 #endif
