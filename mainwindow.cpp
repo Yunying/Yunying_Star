@@ -344,7 +344,7 @@ void MainWindow::handleCarShowTimer(){
 void MainWindow::handleCarTimer(){
   myCar->move();
   if (myCar->collidesWithItem(myGirl) && checkCar == false && candyStatus == false){
-    scoreNum = scoreNum - 200;
+    scoreNum = scoreNum - (300 + 200*level);
     checkScore();
     checkCar = true;
   }
@@ -368,7 +368,7 @@ void MainWindow::handleMoonShowTimer(){
   gamescene->addItem(myMoon);
   moon_move_timer = new QTimer();
   connect(moon_move_timer, SIGNAL(timeout()), this, SLOT(handleMoonTimer()));
-  moon_move_timer->start(10+level*10);
+  moon_move_timer->start(12-level);
 }
 
 void MainWindow::handleMoonTimer(){
@@ -465,7 +465,7 @@ void MainWindow::handleStarTimer(){
   }
   
 
-  if (myStarTime == 27 + 10*level){
+  if (myStarTime == 20 + 10*level){
     //setFocus();
     int sx = rand() % 960+10;
     int svy = rand() % 3+1;
@@ -544,7 +544,7 @@ void MainWindow::handlePause(){
 void MainWindow::checkLife(){
   if (lifeNum > 3){
     lifeNum = 3;
-    scoreNum = scoreNum+1000-level*100;
+    scoreNum = scoreNum+700;
     checkScore();
   }
   
@@ -600,6 +600,10 @@ void MainWindow::checkScore(){
   }
   if (scoreNum > 10000){
     level = 4;
+    levelN -> setText(toStr(level).c_str());
+  }
+  if (scoreNum > 50000){
+    level = 5;
     levelN -> setText(toStr(level).c_str());
   }
 }

@@ -26,7 +26,6 @@
 #include <QMenuBar>
 #include <QAction>
 #include "bomb.h"
-#include "thing.h"
 #include "car.h"
 #include "moon.h"
 #include "girl.h"
@@ -42,7 +41,6 @@ class MainWindow: public QMainWindow{
   public:
     explicit MainWindow();
     ~MainWindow();
-    //void show();
     
     string toStr(int);
     void add_life();
@@ -135,8 +133,6 @@ class MainWindow: public QMainWindow{
     QPixmap *candyGirlImage;
     QPixmap *girlImage;
     
-  
-  
   public slots:
     void handleStart();
     void handleBombShowTimer();
