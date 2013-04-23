@@ -33,7 +33,6 @@
 #include "star.h"
 #include <QMenu>
 
-
 using namespace std;
 
 class MainWindow: public QMainWindow{

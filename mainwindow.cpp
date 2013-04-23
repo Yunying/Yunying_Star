@@ -28,12 +28,13 @@ MainWindow::MainWindow(){
   view = new QGraphicsView(scene);
   setCentralWidget(view);
   view->setFixedSize(1030, 770);
-  view->setWindowTitle("Star");
+  //setWindowTitle("myStar");
+  setWindowFlags(Qt::WindowTitleHint);
+  setWindowTitle("Star by Yunying Tu");
   
   //MenuBar
-  this->setWindowTitle("Star");
   mb = new QMenuBar();
-  fileMenu = new QMenu("Star", this);
+  fileMenu = new QMenu( this);
   mb->addMenu(fileMenu);
   QAction *exitAction = new QAction("Exit", this);
   fileMenu->addAction(exitAction);
@@ -308,7 +309,6 @@ void MainWindow::handleBombTimer(){
       delete myBomb;
       myBombTime = 0;
       myBombStatus = false;
-      setFocus();
     }
     
     else {
@@ -318,11 +318,11 @@ void MainWindow::handleBombTimer(){
       delete myBomb;
       myBombTime = 0;
       myBombStatus = false;
-      
       lifeNum --;
       checkLife();
       
     }
+    setFocus();
   }
 }
 
@@ -410,6 +410,9 @@ void MainWindow::keyPressEvent(QKeyEvent *e) {
     case Qt::Key_Space:
       girlAction();
       break;
+    case Qt::Key_A:
+      myGirl->moveLeft();
+      break;
 
   }
 }
@@ -457,6 +460,7 @@ void MainWindow::handleStarTimer(){
   
 
   if (myStarTime == 27 + 10*level){
+    //setFocus();
     int sx = rand() % 960+10;
     int svy = rand() % 3+1;
     int tm = rand() % (80 + 20*level);
@@ -534,7 +538,8 @@ void MainWindow::checkLife(){
   
   if (lifeNum == 0){
     lifeN->setText(toStr(lifeNum).c_str());
-    QMessageBox errorBox(QMessageBox::NoIcon, "GAME OVER", "GAME OVER! Click OK to Start Again");
+    string show = "Game Over \n User: " + userN->text().toStdString() + " Score: " + toStr(scoreNum) + "\n Click OK to start again!";
+    QMessageBox errorBox(QMessageBox::NoIcon, "GAME OVER! ", show.c_str());
     errorBox.exec();
     handlePause();
     stars.clear();
@@ -608,4 +613,5 @@ void MainWindow::handleBack(){
   back->hide();
   scene->removeItem(InsImage);
 }
+
 
