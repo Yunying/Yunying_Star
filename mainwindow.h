@@ -68,6 +68,9 @@ class MainWindow: public QMainWindow{
     bool checkMoon;
     int level;
     bool candyStatus;
+    int bombShow;
+    int moonShow;
+    int carShow;
     
     QGraphicsView *view;
     QGraphicsScene *scene;
@@ -98,15 +101,14 @@ class MainWindow: public QMainWindow{
     QGraphicsPixmapItem *InsImage;
     Candy *myCandy;
     
-    QTimer *bomb_show_timer;
+    QTimer *timers;
+    
     QTimer *bomb_move_timer;
     Bomb *myBomb;
     
-    QTimer *car_show_timer;
     QTimer *car_move_timer;
     Car *myCar;
     
-    QTimer *moon_show_timer;
     QTimer *moon_move_timer;
     Moon *myMoon;
     
@@ -151,6 +153,7 @@ class MainWindow: public QMainWindow{
     void handleBack();
     void handleCandy();
     void handleGirlCandy();
+    void handleTimers();
     void keyPressEvent(QKeyEvent *event);
 };
 

@@ -102,7 +102,7 @@ void MainWindow::handleStart(){
 
   //Some Initialization
   lifeNum = 3;
-  scoreNum = 900;
+  scoreNum = 0;
   checkCar = false;
   checkMoon = false;
   myBombStatus = false;
@@ -112,6 +112,9 @@ void MainWindow::handleStart(){
   myMoonTime = 0;
   myGirlTime = 0;
   myStarTime = 0;
+  bombShow = 1;
+  moonShow = 1;
+  carShow = 1;
   level = 1;
   candy_is_here = false;
   myCandyTime = 0;
@@ -224,28 +227,15 @@ void MainWindow::handleStart(){
   gamescene->addWidget(quit);
   connect(quit, SIGNAL(clicked()), this, SLOT(handleQuit()));
   
-  //Bomb
-  bomb_show_timer = new QTimer();
-  connect(bomb_show_timer, SIGNAL(timeout()), this, SLOT(handleBombShowTimer()));
-  bomb_show_timer->start(15000);
+  //Timers
+  timers = new QTimer();
+  timers->start(5000);
+  connect(timers, SIGNAL(timeout()),this, SLOT(handleTimers()));
   
   //Dropping Stars
   star_show_timer = new QTimer();
   connect(star_show_timer, SIGNAL(timeout()), this, SLOT(handleStarTimer()));
   star_show_timer -> start(10);
-  
-  
-  //Appear Car
-  car_show_timer = new QTimer();
-  connect(car_show_timer, SIGNAL(timeout()), this, SLOT(handleCarShowTimer()));
-  car_show_timer->start(10000);
-  
-  
-  //Moon
-  moon_show_timer = new QTimer();
-  connect(moon_show_timer, SIGNAL(timeout()), this, SLOT(handleMoonShowTimer()));
-  moon_show_timer->start(30000);
-
   
   //Girl
   girlImage = new QPixmap("./Girl.png");
@@ -262,6 +252,28 @@ string MainWindow::toStr(int num){
   ss << num;
   return ss.str();
 }
+
+void MainWindow::handleTimers(){
+  moonShow++;
+  carShow++;
+  bombShow++;
+  
+  if (moonShow == 6){
+    handleMoonShowTimer();
+    moonShow = 0;
+  }
+  
+  if (carShow == 2){
+    handleCarShowTimer();
+    carShow = 0;
+  }
+  
+  if (bombShow == 3){
+    handleBombShowTimer();
+    bombShow = 0;
+  }
+}
+  
 
 void MainWindow::handleBombShowTimer(){
   int coX = rand() % 300;
@@ -404,6 +416,9 @@ void MainWindow::keyPressEvent(QKeyEvent *e) {
     case Qt::Key_A:
       myGirl->moveLeft();
       break;
+    case Qt::Key_D:
+      myGirl->moveRight();
+      break;
 
   }
 }
@@ -490,10 +505,8 @@ void MainWindow::handleStarTimer(){
 void MainWindow::handlePause(){
 
   if (star_show_timer->isActive()) {
+    timers->stop();
 	star_show_timer->stop();
-	bomb_show_timer->stop();
-	moon_show_timer->stop();
-	car_show_timer->stop();
 	if (myCarStatus){
 	  car_move_timer->stop();
 	}
@@ -501,20 +514,28 @@ void MainWindow::handlePause(){
 	  bomb_move_timer->stop();
 	}
 	if (myMoonStatus){
-	  myMoonTime = 550;
+	  moon_move_timer->stop();
+	}
+	if (candyStatus){
+	  candyS->stop();
 	}
 	
   }
   else {
+    setFocus();
 	star_show_timer->start();
-	bomb_show_timer->start();
-	moon_show_timer->start();
-	car_show_timer->start();
+	timers->start();
 	if (myCarStatus){
 	  car_move_timer->start();
 	}
 	if (myBombStatus){
 	  bomb_move_timer->start();
+	}
+	if (myMoonStatus){
+	  moon_move_timer->start();
+	}
+	if (candyStatus){
+	  candyS->start();
 	}
   }
 
