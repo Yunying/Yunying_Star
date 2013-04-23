@@ -5,26 +5,9 @@ using namespace std;
 QBrush whiteBrush(Qt::white);
 QBrush blackBrush(Qt::black);
 
-
-//void MainWindow::show(){
-  //view->show();
-//}
-
 MainWindow::MainWindow(){
   setFocusPolicy(Qt::StrongFocus);
-  //Some Initialization
-  lifeNum = 3;
-  scoreNum = 0;
-  myBombTime = 0;
-  myMoonTime = 0;
-  myGirlTime = 0;
-  myStarTime = 0;
-  myBombStatus = false;
-  myMoonStatus = false;
-  myCarStatus = false;
   
-  
-
   //View
   scene = new QGraphicsScene();
   view = new QGraphicsView(scene);
@@ -42,7 +25,6 @@ MainWindow::MainWindow(){
   fileMenu->addAction(exitAction);
   connect(exitAction, SIGNAL(triggered()), this, SLOT(handleQuit()));
   setMenuBar(mb);
-  
   
   //SetBackground
   QPixmap night("./night.jpg");
@@ -651,7 +633,6 @@ void MainWindow::handleCandy(){
     candyS->start(8000);
     connect(candyS, SIGNAL(timeout()), this, SLOT(handleGirlCandy()));
     candyStatus = true;
-    cout << "Eaten" << endl;
   }
     
   
@@ -675,9 +656,3 @@ void MainWindow::handleGirlCandy(){
     myGirl->setPixmap(*girlImage); 
 }
   
-  
-
-
-
-
-
