@@ -31,6 +31,7 @@
 #include "moon.h"
 #include "girl.h"
 #include "star.h"
+#include "candy.h"
 #include <QMenu>
 
 using namespace std;
@@ -66,6 +67,7 @@ class MainWindow: public QMainWindow{
     bool checkCar;
     bool checkMoon;
     int level;
+    bool candyStatus;
     
     QGraphicsView *view;
     QGraphicsScene *scene;
@@ -94,6 +96,7 @@ class MainWindow: public QMainWindow{
     QPushButton *back;
     QPixmap *Instruct;
     QGraphicsPixmapItem *InsImage;
+    Candy *myCandy;
     
     QTimer *bomb_show_timer;
     QTimer *bomb_move_timer;
@@ -113,6 +116,11 @@ class MainWindow: public QMainWindow{
     vector<Star*> stars;
     QTimer *star_show_timer;
     
+    QTimer *candy_timer;
+    bool candy_is_here;
+    QTimer *candyS;
+    int myCandyTime;
+    
     QPixmap *greenStar;
     QPixmap *blueStar;
     QPixmap *redStar;
@@ -121,6 +129,10 @@ class MainWindow: public QMainWindow{
     QPixmap *moonImage;
     QPixmap *carImage;
     QPixmap *bombImage;
+    QPixmap *candyImage;
+    QPixmap *candyGirlImage;
+    QPixmap *girlImage;
+    
   
   
   public slots:
@@ -137,6 +149,8 @@ class MainWindow: public QMainWindow{
     void handleQuit();
     void handleIns();
     void handleBack();
+    void handleCandy();
+    void handleGirlCandy();
     void keyPressEvent(QKeyEvent *event);
 };
 

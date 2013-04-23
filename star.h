@@ -9,11 +9,11 @@ class Star : public QGraphicsPixmapItem{
     Star();
     ~Star();
     Star(QPixmap& myStar, int, int, int);
-    void move();
+    virtual void move();
     bool inscreen;
     int color;
     
-  private:
+  protected:
     int x;
     int y;
     int vy;

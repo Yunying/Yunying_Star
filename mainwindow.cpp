@@ -22,6 +22,8 @@ MainWindow::MainWindow(){
   myBombStatus = false;
   myMoonStatus = false;
   myCarStatus = false;
+  
+  
 
   //View
   scene = new QGraphicsScene();
@@ -118,7 +120,7 @@ void MainWindow::handleStart(){
 
   //Some Initialization
   lifeNum = 3;
-  scoreNum = 0;
+  scoreNum = 900;
   checkCar = false;
   checkMoon = false;
   myBombStatus = false;
@@ -129,6 +131,9 @@ void MainWindow::handleStart(){
   myGirlTime = 0;
   myStarTime = 0;
   level = 1;
+  candy_is_here = false;
+  myCandyTime = 0;
+  candyStatus = false;
   greenStar = new QPixmap("./greenStar.png");
   redStar = new QPixmap ("./redStar.png");
   yellowStar = new QPixmap ("./yellowStar.png");
@@ -137,6 +142,8 @@ void MainWindow::handleStart(){
   moonImage = new QPixmap("./Moon.png");
   bombImage = new QPixmap("./Bomb.png");
   carImage = new QPixmap("./Car.png");
+  candyImage = new QPixmap("./Candy.png");
+  candyGirlImage = new QPixmap("./CandyGirl.png");
   
   
   //Check if the user has entered a username
@@ -259,8 +266,8 @@ void MainWindow::handleStart(){
 
   
   //Girl
-  QPixmap girlImage("./Girl.png");
-  myGirl = new Girl(girlImage);
+  girlImage = new QPixmap("./Girl.png");
+  myGirl = new Girl(*girlImage);
   gamescene->addItem(myGirl);
   girl_timer = new QTimer();
   connect(girl_timer, SIGNAL(timeout()), this, SLOT(handleGirlTimer()));
@@ -318,8 +325,10 @@ void MainWindow::handleBombTimer(){
       delete myBomb;
       myBombTime = 0;
       myBombStatus = false;
-      lifeNum --;
-      checkLife();
+      if (candyStatus == false){
+        lifeNum --;
+        checkLife();
+      }
       
     }
     setFocus();
@@ -340,7 +349,7 @@ void MainWindow::handleCarShowTimer(){
 
 void MainWindow::handleCarTimer(){
   myCar->move();
-  if (myCar->collidesWithItem(myGirl) && checkCar == false){
+  if (myCar->collidesWithItem(myGirl) && checkCar == false && candyStatus == false){
     scoreNum = scoreNum - 200;
     checkScore();
     checkCar = true;
@@ -554,6 +563,16 @@ void MainWindow::checkLife(){
 }
     
 void MainWindow::checkScore(){
+  if (scoreNum > atoi(scoreN->text().toStdString().c_str())){
+    if (scoreNum % 1000 == 0 && candy_is_here == false && candyStatus == false){
+      cout << "Score detected" << endl;
+      candy_timer = new QTimer();
+      candy_timer->start(30);
+      connect(candy_timer, SIGNAL(timeout()), this, SLOT(handleCandy()));
+    }
+  }
+
+
   if (scoreNum < 0){
     scoreNum = 0;
     scoreN -> setText(toStr(scoreNum).c_str());
@@ -589,7 +608,9 @@ void MainWindow::checkStar(Star* star){
       scoreNum += 20;
     }
     else {
-      scoreNum -= 10;
+      if (candyStatus == false){
+        scoreNum -= 10;
+      }
     }
     checkScore();
   }
@@ -613,5 +634,50 @@ void MainWindow::handleBack(){
   back->hide();
   scene->removeItem(InsImage);
 }
+
+void MainWindow::handleCandy(){
+  myCandyTime++;
+  
+  if (candy_is_here == false){
+    myCandy = new Candy(*candyImage, rand()%1000);
+    gamescene->addItem(myCandy);
+    candy_is_here = true;
+  }
+  
+  else if (myCandy->collidesWithItem(myGirl)){
+    myGirl->setPixmap(*candyGirlImage);
+    myCandyTime = 100;
+    candyS = new QTimer();
+    candyS->start(8000);
+    connect(candyS, SIGNAL(timeout()), this, SLOT(handleGirlCandy()));
+    candyStatus = true;
+    cout << "Eaten" << endl;
+  }
+    
+  
+  if (myCandyTime >= 100){
+    if (candy_is_here == true){
+      gamescene->removeItem(myCandy);
+      candy_timer -> stop();
+      delete candy_timer;
+      candy_is_here = false;
+      delete myCandy;
+      myCandyTime = 0;
+    }
+  }
+}
+  
+void MainWindow::handleGirlCandy(){
+
+    candyStatus = false;
+    candyS->stop();
+    delete candyS;
+    myGirl->setPixmap(*girlImage); 
+}
+  
+  
+
+
+
 
 
