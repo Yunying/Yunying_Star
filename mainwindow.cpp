@@ -423,6 +423,9 @@ void MainWindow::keyPressEvent(QKeyEvent *e) {
     case Qt::Key_Space:
       girlAction();
       break;
+    case Qt::Key_W:
+      girlAction();
+      break;
     case Qt::Key_A:
       myGirl->moveLeft();
       break;
