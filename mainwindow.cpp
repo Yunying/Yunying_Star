@@ -465,7 +465,6 @@ void MainWindow::handleStarTimer(){
     }
   }
   
-
   if (myStarTime == 20 + 10*level){
     setFocus();
     int sx = rand() % 960+10;
