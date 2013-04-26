@@ -1,12 +1,12 @@
 # Game - Programming Assignments Private Repository
 ### Student Information
-  + Name: Tommy Trojan
-  + USC Email: ttrojan@usc.edu
-  + USC ID: 0123456789
+  + Name: Yunying Tu
+  + USC Email: yunyingt@usc.edu
+  + USC ID: 8634605550
 
 ### Game Information
-  + Game Name: myAwsomeGame
-  + Game Description: One sentence game description
+  + Game Name: Twinkle Twinkle Little Star
+  + Game Description: To collect the shiny stars while avoid all dangers in the universe
   + [Game Design Doc](GameDesignDoc.md)
 
 
@@ -14,12 +14,16 @@
 The grader should use the following procedure to compile and run the code:
 ```shell
 #Compile Instructions
-echo "Write command here"
+$ qmake -project
+$ qmake
+$ make
 #Doxygen Instructions
-echo "Write command here"
+$ doxygen -g config.txt
+$ doxygen config.txt
 #Command to run
-echo "Write command here"
+$ ./game_yunyingt
 ```
 
 ### Screenshots -- [Optional]
 You can either remove this section or add screenshots if you wish.
+![Screen Shot](myGame.jpg "ScreenShow")

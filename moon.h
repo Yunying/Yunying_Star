@@ -7,15 +7,31 @@ using namespace std;
 
 class Moon : public QGraphicsPixmapItem{
   public:
+    /** Default Constructor */
     Moon();
+    
+    /** Default Destructor */
     ~Moon();
+    
+    /** @param moon The image of the moon
+      * @param nx the random x-coordinate of the moon
+      */
     Moon(QPixmap& moon, int nx);
+    
+    /** The first part of the moon's moving: coming down from the top of the screen */
     void come();
+    
+    /** The last part of the moon's moving: going up from the bottom of the screen */
     void leave();
     
   private:
+    /** initial y-coordinate */
     int y;
+    
+    /** initial x-coordinate */
     int x;
+    
+    /** initial y-velocity */
     int vy;
 };
 
