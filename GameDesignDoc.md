@@ -88,7 +88,7 @@
    If the score decreases to below zero after the deduction, a life will be lost.
    The score will be zero. (`Score` is an unsigned int)
 
-4. When the `BlackStar` explodes, the player loses a life.
+4. When the `BlackStar` explodes, the player loses a life. But the player will NOT lose points or life if she touches the bomb.
    Score remains the same.
 
 5. When the player gets a `Moon`, she gets an extra life.
