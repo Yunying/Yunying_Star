@@ -5,6 +5,7 @@ using namespace std;
 QBrush whiteBrush(Qt::white);
 QBrush blackBrush(Qt::black);
 
+/** @brief Set up the Start Screen */
 MainWindow::MainWindow(){
   setFocusPolicy(Qt::StrongFocus);
   
@@ -87,6 +88,7 @@ MainWindow::MainWindow(){
 
 MainWindow::~MainWindow(){}
 
+/** @brief Set up the game scene, initialize game values and start timers */
 void MainWindow::handleStart(){
 
   //Some Initialization
@@ -101,9 +103,9 @@ void MainWindow::handleStart(){
   myMoonTime = 0;
   myGirlTime = 0;
   myStarTime = 0;
-  bombShow = 1;
-  moonShow = 1;
-  carShow = 1;
+  bombShow = 0;
+  moonShow = 0;
+  carShow = 0;
   level = 1;
   candy_is_here = false;
   myCandyTime = 0;
@@ -236,7 +238,7 @@ void MainWindow::handleStart(){
   //Dropping Stars
   star_show_timer = new QTimer();
   connect(star_show_timer, SIGNAL(timeout()), this, SLOT(handleStarTimer()));
-  star_show_timer -> start(10);
+  star_show_timer -> start(15);
   
   //Girl
   girlImage = new QPixmap("./Girl.png");
@@ -248,34 +250,36 @@ void MainWindow::handleStart(){
   setFocus();
 }
 
+/** @brief Convert int to string */
 string MainWindow::toStr(int num){
   stringstream ss;
   ss << num;
   return ss.str();
 }
 
+/** @brief Control the appearance of bomb, moon and car */
 void MainWindow::handleTimers(){
   moonShow++;
   carShow++;
   bombShow++;
   
-  if (moonShow == 6){
+  if (moonShow == 8){
     handleMoonShowTimer();
     moonShow = 0;
   }
   
-  if (carShow == 2){
+  if (carShow == 3){
     handleCarShowTimer();
     carShow = 0;
   }
   
-  if (bombShow == 3){
+  if (bombShow == 5){
     handleBombShowTimer();
     bombShow = 0;
   }
 }
   
-
+/** @brief Control the initial status of the bomb */
 void MainWindow::handleBombShowTimer(){
   int coX = rand() % 300;
   int coY = rand() % 300;
@@ -294,7 +298,7 @@ void MainWindow::handleBombShowTimer(){
   bomb_move_timer->start(20);
 }
   
-
+/** @brief Control the bomb's moving */
 void MainWindow::handleBombTimer(){
   myBomb->move(1000, 760);
   myBombTime++;
@@ -313,6 +317,7 @@ void MainWindow::handleBombTimer(){
       myBombStatus = false;
     }
     
+    //Apply life deduction if not clicked
     else {
       gamescene->removeItem(myBomb);
       bomb_move_timer->stop();
@@ -330,18 +335,20 @@ void MainWindow::handleBombTimer(){
   }
 }
 
+/** @brief Control the initial status of the car */
 void MainWindow::handleCarShowTimer(){
   
-  int carV = 3+level*2;
+  int carV = 1+level*3;
   myCar = new Car(*carImage, carV);
   myCarStatus = true;
 
   gamescene->addItem(myCar);
   car_move_timer = new QTimer();
   connect(car_move_timer, SIGNAL(timeout()), this, SLOT(handleCarTimer()));
-  car_move_timer->start(10-level);
+  car_move_timer->start(10);
 }
 
+/** @brief Control the car's moving */
 void MainWindow::handleCarTimer(){
   myCar->move();
   if (myCar->collidesWithItem(myGirl) && checkCar == false && candyStatus == false){
@@ -349,8 +356,7 @@ void MainWindow::handleCarTimer(){
     checkScore();
     checkCar = true;
   }
-    
-  
+
   if (myCar->carStatus){
     gamescene->removeItem(myCar);
     car_move_timer->stop();
@@ -361,17 +367,18 @@ void MainWindow::handleCarTimer(){
   }
 }
 
+/** @brief Control the initial status of the moon */
 void MainWindow::handleMoonShowTimer(){
-  
   myMoonStatus = true;
   int ran = rand() % 700+100;
   myMoon = new Moon(*moonImage, ran);
   gamescene->addItem(myMoon);
   moon_move_timer = new QTimer();
   connect(moon_move_timer, SIGNAL(timeout()), this, SLOT(handleMoonTimer()));
-  moon_move_timer->start(15-level);
+  moon_move_timer->start(22-4*level);
 }
 
+/** @brief Handle the moving of the moon */
 void MainWindow::handleMoonTimer(){
   myMoonTime++;
   if (myMoon->collidesWithItem(myGirl) && checkMoon == false){
@@ -402,7 +409,8 @@ void MainWindow::handleMoonTimer(){
     checkMoon = false;
   }
 }
-  
+
+/** @brief Receive keyboard signals and move the girl accordingly*/
 void MainWindow::keyPressEvent(QKeyEvent *e) {
   switch (e->key()){
     case Qt::Key_Left:
@@ -414,16 +422,10 @@ void MainWindow::keyPressEvent(QKeyEvent *e) {
     case Qt::Key_Space:
       girlAction();
       break;
-    case Qt::Key_A:
-      myGirl->moveLeft();
-      break;
-    case Qt::Key_D:
-      myGirl->moveRight();
-      break;
-
   }
 }
 
+/** @brief Control the jump action of the girl */
 void MainWindow::handleGirlTimer(){
   myGirlTime++;
 
@@ -444,11 +446,13 @@ void MainWindow::handleGirlTimer(){
   }
 }
   
+/** @brief Start the girl's action */
 void MainWindow::girlAction(){
   girl_timer->start(20);
   
 } 
 
+/** @brief Control the star's appearance and moving */
 void MainWindow::handleStarTimer(){
   myStarTime++;
   unsigned int starCount = 0;
@@ -465,8 +469,8 @@ void MainWindow::handleStarTimer(){
     }
   }
   
-  if (myStarTime == 20 + 10*level){
-    setFocus();
+  if (myStarTime == 30 + 10*level){
+    //setFocus();
     int sx = rand() % 960+10;
     int svy = rand() % 3+1;
     int tm = rand() % (80 + 20*level);
@@ -502,6 +506,7 @@ void MainWindow::handleStarTimer(){
   }
 }
 
+/** @brief Stop all timers */
 void MainWindow::handlePause(){
 
   if (star_show_timer->isActive()) {
@@ -540,7 +545,8 @@ void MainWindow::handlePause(){
   }
 
 }     
-  
+
+/** @brief Check if the game ends and update the lifeNumber in the scene*/
 void MainWindow::checkLife(){
   if (lifeNum > 3){
     lifeNum = 3;
@@ -553,10 +559,8 @@ void MainWindow::checkLife(){
     string show = "Game Over \n User: " + userN->text().toStdString() + " Score: " + toStr(scoreNum) + "\n Click OK to start again!";
     QMessageBox errorBox(QMessageBox::NoIcon, "GAME OVER! ", show.c_str());
     errorBox.exec();
-    handlePause();
-    stars.clear();
+    handleRestart();
 
-    view->setScene(scene);
     return;
   }
   else {
@@ -564,7 +568,8 @@ void MainWindow::checkLife(){
   }
   
 }
-    
+
+/** @brief Check the score to see if should change the lifeNum or level */   
 void MainWindow::checkScore(){
   if (scoreNum > atoi(scoreN->text().toStdString().c_str())){
     if (scoreNum % 1000 == 0 && candy_is_here == false && candyStatus == false){
@@ -584,20 +589,20 @@ void MainWindow::checkScore(){
   else {
     scoreN -> setText(toStr(scoreNum).c_str());
   }
-  if (scoreNum < 1000){
+  if (scoreNum < 500){
     level = 1;
     levelN -> setText(toStr(level).c_str());
   }
-  if (scoreNum >= 1000){
+  if (scoreNum >= 500){
     level = 2;
     levelN -> setText(toStr(level).c_str());
   }
   
-  if (scoreNum > 3000){
+  if (scoreNum > 2000){
     level = 3;
     levelN -> setText(toStr(level).c_str());
   }
-  if (scoreNum > 50000){
+  if (scoreNum > 5000){
     level = 4;
     levelN -> setText(toStr(level).c_str());
   }
@@ -611,6 +616,7 @@ void MainWindow::checkScore(){
   }
 }
 
+/** @brief Check if the star collides with the girl */
 void MainWindow::checkStar(Star* star){
   if (star->collidesWithItem(myGirl)){
     star->inscreen = false;
@@ -626,12 +632,13 @@ void MainWindow::checkStar(Star* star){
   }
 }
 
+/** @brief Quit */
 void MainWindow::handleQuit(){
   QApplication::quit();
 }
 
+/** @brief Set up the instructions */
 void MainWindow::handleIns(){
-  
   scene->addItem(InsImage);
   back = new QPushButton("Back");
   back->setFont(QFont("Helvatica", 23, 40));
@@ -640,11 +647,13 @@ void MainWindow::handleIns(){
   connect(back, SIGNAL(clicked()), this, SLOT(handleBack()));
 }
 
+/** @brief Go back to the start screen from the instruction page */
 void MainWindow::handleBack(){
   back->hide();
   scene->removeItem(InsImage);
 }
 
+/** @brief Monitor the candy's status on the screen */
 void MainWindow::handleCandy(){
   myCandyTime++;
   
@@ -675,7 +684,8 @@ void MainWindow::handleCandy(){
     }
   }
 }
-  
+
+/** @brief Handle the Girl's in the candyStatus */
 void MainWindow::handleGirlCandy(){
 
     candyStatus = false;
@@ -684,8 +694,35 @@ void MainWindow::handleGirlCandy(){
     myGirl->setPixmap(*girlImage); 
 }
 
+/** @breif Restart the game */
 void MainWindow::handleRestart(){
-  handlePause();
+    timers->stop();
+    delete timers;
+	star_show_timer->stop();
+	delete star_show_timer;
+	if (myCarStatus){
+	  car_move_timer->stop();
+	  delete car_move_timer;
+	  delete myCar;
+	}
+	if (myBombStatus){
+	  bomb_move_timer->stop();
+	  delete bomb_move_timer;
+	  delete myBomb;
+	}
+	if (myMoonStatus){
+	  moon_move_timer->stop();
+	  delete moon_move_timer;
+	  delete myMoon;
+	}
+	if (candy_is_here){
+	  delete candy_timer;
+	  delete myCandy;
+	}
+	if (candyStatus){
+	  candyS->stop();
+	  delete candyS;
+	}
   stars.clear();
   view->setScene(scene);
 }
