@@ -13,18 +13,7 @@ MainWindow::MainWindow(){
   view = new QGraphicsView(scene);
   setCentralWidget(view);
   view->setFixedSize(1030, 770);
-  //setWindowTitle("myStar");
-  setWindowFlags(Qt::WindowTitleHint);
   setWindowTitle("Star by Yunying Tu");
-  
-  //MenuBar
-  mb = new QMenuBar();
-  fileMenu = new QMenu( this);
-  mb->addMenu(fileMenu);
-  QAction *exitAction = new QAction("Exit", this);
-  fileMenu->addAction(exitAction);
-  connect(exitAction, SIGNAL(triggered()), this, SLOT(handleQuit()));
-  setMenuBar(mb);
   
   //SetBackground
   QPixmap night("./night.jpg");
@@ -226,6 +215,18 @@ void MainWindow::handleStart(){
   quit->setPalette(quitPalette);
   gamescene->addWidget(quit);
   connect(quit, SIGNAL(clicked()), this, SLOT(handleQuit()));
+  
+  //Restart Button
+  QPixmap restartImage("./Restart.png");
+  restart = new QPushButton();
+  restart->setGeometry(760, 20, 55, 55);
+  QPalette restartPalette;
+  restartPalette.setBrush(restart->backgroundRole(), QBrush(restartImage));
+  restart->setFlat(true);
+  restart->setAutoFillBackground(true);
+  restart->setPalette(restartPalette);
+  gamescene->addWidget(restart);
+  connect(restart, SIGNAL(clicked()), this, SLOT(handleRestart()));
   
   //Timers
   timers = new QTimer();
@@ -466,7 +467,6 @@ void MainWindow::handleStarTimer(){
   
 
   if (myStarTime == 20 + 10*level){
-    //setFocus();
     int sx = rand() % 960+10;
     int svy = rand() % 3+1;
     int tm = rand() % (80 + 20*level);
@@ -568,7 +568,6 @@ void MainWindow::checkLife(){
 void MainWindow::checkScore(){
   if (scoreNum > atoi(scoreN->text().toStdString().c_str())){
     if (scoreNum % 1000 == 0 && candy_is_here == false && candyStatus == false){
-      cout << "Score detected" << endl;
       candy_timer = new QTimer();
       candy_timer->start(30);
       connect(candy_timer, SIGNAL(timeout()), this, SLOT(handleCandy()));
@@ -632,7 +631,7 @@ void MainWindow::handleIns(){
   scene->addItem(InsImage);
   back = new QPushButton("Back");
   back->setFont(QFont("Helvatica", 23, 40));
-  back->setGeometry(800, 550, 120, 60);
+  back->setGeometry(800, 50, 120, 60);
   scene->addWidget(back);
   connect(back, SIGNAL(clicked()), this, SLOT(handleBack()));
 }
@@ -680,4 +679,12 @@ void MainWindow::handleGirlCandy(){
     delete candyS;
     myGirl->setPixmap(*girlImage); 
 }
+
+void MainWindow::handleRestart(){
+  handlePause();
+  stars.clear();
+  view->setScene(scene);
+}
+
+
   

@@ -32,6 +32,7 @@
 #include "star.h"
 #include "candy.h"
 #include <QMenu>
+#include <QVBoxLayout>
 
 using namespace std;
 
@@ -93,11 +94,14 @@ class MainWindow: public QMainWindow{
     QPushButton *Pause;
     QPushButton *quit;
     QPushButton *quit1;
+    QPushButton *restart;
     QPushButton *Instructions;
     QPushButton *back;
     QPixmap *Instruct;
     QGraphicsPixmapItem *InsImage;
     Candy *myCandy;
+    QAction *exitAction;
+    QAction *startAction;
     
     QTimer *timers;
     
@@ -150,6 +154,7 @@ class MainWindow: public QMainWindow{
     void handleCandy();
     void handleGirlCandy();
     void handleTimers();
+    void handleRestart();
     void keyPressEvent(QKeyEvent *event);
 };
 
