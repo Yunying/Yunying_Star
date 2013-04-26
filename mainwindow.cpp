@@ -282,8 +282,8 @@ void MainWindow::handleBombShowTimer(){
   int Vx = rand() % 3+1;
   int Vy = rand() % 3+1;
   if (level != 1){
-    Vx = Vx+2*level;
-    Vy = Vy+2*level;
+    Vx = Vx+3*level;
+    Vy = Vy+3*level;
   }
   myBombStatus = true;
   
@@ -339,13 +339,13 @@ void MainWindow::handleCarShowTimer(){
   gamescene->addItem(myCar);
   car_move_timer = new QTimer();
   connect(car_move_timer, SIGNAL(timeout()), this, SLOT(handleCarTimer()));
-  car_move_timer->start(10);
+  car_move_timer->start(10-level);
 }
 
 void MainWindow::handleCarTimer(){
   myCar->move();
   if (myCar->collidesWithItem(myGirl) && checkCar == false && candyStatus == false){
-    scoreNum = scoreNum - (300 + 200*level);
+    scoreNum = scoreNum - (300*level);
     checkScore();
     checkCar = true;
   }
@@ -369,7 +369,7 @@ void MainWindow::handleMoonShowTimer(){
   gamescene->addItem(myMoon);
   moon_move_timer = new QTimer();
   connect(moon_move_timer, SIGNAL(timeout()), this, SLOT(handleMoonTimer()));
-  moon_move_timer->start(12-level);
+  moon_move_timer->start(15-level);
 }
 
 void MainWindow::handleMoonTimer(){
@@ -467,6 +467,7 @@ void MainWindow::handleStarTimer(){
   
 
   if (myStarTime == 20 + 10*level){
+    setFocus();
     int sx = rand() % 960+10;
     int svy = rand() % 3+1;
     int tm = rand() % (80 + 20*level);
@@ -584,25 +585,29 @@ void MainWindow::checkScore(){
   else {
     scoreN -> setText(toStr(scoreNum).c_str());
   }
-  if (scoreNum < 2000){
+  if (scoreNum < 1000){
     level = 1;
     levelN -> setText(toStr(level).c_str());
   }
-  if (scoreNum >= 2000){
+  if (scoreNum >= 1000){
     level = 2;
     levelN -> setText(toStr(level).c_str());
   }
   
-  if (scoreNum > 5000){
+  if (scoreNum > 3000){
     level = 3;
     levelN -> setText(toStr(level).c_str());
   }
-  if (scoreNum > 10000){
+  if (scoreNum > 50000){
     level = 4;
     levelN -> setText(toStr(level).c_str());
   }
-  if (scoreNum > 50000){
+  if (scoreNum > 10000){
     level = 5;
+    levelN -> setText(toStr(level).c_str());
+  }
+  if (scoreNum > 50000){
+    level = 6;
     levelN -> setText(toStr(level).c_str());
   }
 }
@@ -615,7 +620,7 @@ void MainWindow::checkStar(Star* star){
     }
     else {
       if (candyStatus == false){
-        scoreNum -= 10;
+        scoreNum -= 20;
       }
     }
     checkScore();
