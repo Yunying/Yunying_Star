@@ -1,10 +1,10 @@
 #Game: Catching Stars
 
 ##Initial Design
-![Initial Design] (http://ww4.sinaimg.cn/large/6fb2ab4dgw1e3ujrs3yj8j.jpg "Initial Design")
+![Initial Design] (./Game.jpg "Initial Design")
 
 ##Screen Shot
-![Final Game](http://ww3.sinaimg.cn/bmiddle/6fb2ab4dgw1e42s2vq45jj20sd1jwk5o.jpg "Final Game")
+![Final Game](./myGame.jpg "Final Game")
 
 **Note:** The last picture is still an effect picture I made by photoshop because it's hard
 	      to catch a moment when everything appears at the same time in the game.
