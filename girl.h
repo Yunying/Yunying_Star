@@ -7,6 +7,7 @@ using namespace std;
   * The user-controlled object. \n
   * Can move left, right and jump. \n
   * When it collides with other items in the screen, something will happen. \n
+  * @brief The user-controlled object
   */
 class Girl : public QGraphicsPixmapItem{
   

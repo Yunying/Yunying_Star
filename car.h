@@ -7,6 +7,7 @@
   * Will disappear after it goes too right to be in the screen. \n
   * It worth hundreds of points. The higher the level, the more points will be reduced when the girl hits the car. \n
   * The speed will go up as the level difficulty goes up \n
+  * @brief A lot points will lost if hit by the car.
   */
 
 using namespace std;

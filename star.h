@@ -10,6 +10,7 @@ using namespace std;
   * There are two kinds of stars: normal star and EvilStar. \n
   * Evil Star worths -20 points while normal star worths 20 points.
   * Score will change when the girl collides with the star.
+  * @brief Collect the shiny ones, Avoid the evil ones and Enjoy!
   */
 class Star : public QGraphicsPixmapItem{
   public:

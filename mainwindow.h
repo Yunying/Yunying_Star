@@ -35,7 +35,8 @@
 #include <QVBoxLayout>
 
 using namespace std;
-
+/** @class MainWindow
+  * @brief All important actions in the game happens and conveys in this class. */
 class MainWindow: public QMainWindow{
   Q_OBJECT
   
