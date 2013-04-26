@@ -82,8 +82,8 @@ MainWindow::MainWindow(){
   scene->addWidget(quit1);
   connect(quit1, SIGNAL(clicked()), this, SLOT(handleQuit()));
   
-  view->show();
-  
+  //Show the view
+  view->show(); 
 }
 
 MainWindow::~MainWindow(){}
@@ -263,6 +263,9 @@ void MainWindow::handleTimers(){
   carShow++;
   bombShow++;
   
+  //Control the intervals of different objects
+  //Everytime the number reaches the pre-set interval, an object shows in the screen
+  //(The timer that controls that object starts)
   if (moonShow == 8){
     handleMoonShowTimer();
     moonShow = 0;
@@ -281,6 +284,7 @@ void MainWindow::handleTimers(){
   
 /** @brief Control the initial status of the bomb */
 void MainWindow::handleBombShowTimer(){
+  //Set the initial velocity and position of the bomb
   int coX = rand() % 300;
   int coY = rand() % 300;
   int Vx = rand() % 3+1;
@@ -291,6 +295,7 @@ void MainWindow::handleBombShowTimer(){
   }
   myBombStatus = true;
   
+  //Start the timer that controls the bomb's moving
   myBomb = new Bomb(*bombImage, coX, coY, Vx, Vy);
   bomb_move_timer = new QTimer();
   gamescene->addItem(myBomb);
@@ -302,11 +307,14 @@ void MainWindow::handleBombShowTimer(){
 void MainWindow::handleBombTimer(){
   myBomb->move(1000, 760);
   myBombTime++;
+  
+  //Bomb disappears after sevral seconds
   if (myBomb->bombClicked){
     myBombTime = 500;
   }
   
   //Bomb Disappear
+  //If bomb is clicked, the myBombTime will be set up as 500, so life will not be deducted
   if (myBombTime >= 400){
     if (myBombTime > 490){
       gamescene->removeItem(myBomb);
@@ -336,7 +344,7 @@ void MainWindow::handleBombTimer(){
 
 /** @brief Control the initial status of the car */
 void MainWindow::handleCarShowTimer(){
-  
+  //Initialize the car status
   int carV = 3+level*2;
   myCar = new Car(*carImage, carV);
   myCarStatus = true;
@@ -350,13 +358,14 @@ void MainWindow::handleCarShowTimer(){
 /** @brief Control the car's moving */
 void MainWindow::handleCarTimer(){
   myCar->move();
+  //If the car collides with the girl, than some points will be deducted
   if (myCar->collidesWithItem(myGirl) && checkCar == false && candyStatus == false){
-    scoreNum = scoreNum - (300 + 200*level);
+    scoreNum = scoreNum - (300*level);
     checkScore();
     checkCar = true;
   }
     
-  
+  //The car will be removed after it goes out of the screen
   if (myCar->carStatus){
     gamescene->removeItem(myCar);
     car_move_timer->stop();
@@ -369,19 +378,19 @@ void MainWindow::handleCarTimer(){
 
 /** @brief Control the initial status of the moon */
 void MainWindow::handleMoonShowTimer(){
-  
   myMoonStatus = true;
   int ran = rand() % 700+100;
   myMoon = new Moon(*moonImage, ran);
   gamescene->addItem(myMoon);
   moon_move_timer = new QTimer();
   connect(moon_move_timer, SIGNAL(timeout()), this, SLOT(handleMoonTimer()));
-  moon_move_timer->start(12-level);
+  moon_move_timer->start(12);
 }
 
 /** @brief Handle the moving of the moon */
 void MainWindow::handleMoonTimer(){
   myMoonTime++;
+  //If the girl gets the moon, she will have one more life
   if (myMoon->collidesWithItem(myGirl) && checkMoon == false){
     checkMoon = true;
     myMoonTime = 550;
@@ -389,6 +398,7 @@ void MainWindow::handleMoonTimer(){
     checkLife();
   }
   
+  //The moon's moving route
   if (myMoonTime <= 200){
     myMoon->come();
   }
@@ -466,6 +476,7 @@ void MainWindow::girlAction(){
 void MainWindow::handleStarTimer(){
   myStarTime++;
   unsigned int starCount = 0;
+  //Move the star; Check if the star is still in the screen
   while (starCount < stars.size()){
     if (stars[starCount]->inscreen){
       stars[starCount]->move();
@@ -479,15 +490,16 @@ void MainWindow::handleStarTimer(){
     }
   }
   
-
-  if (myStarTime == 20 + 10*level){
+  //Stars appear at different frequency at different levels
+  if (myStarTime == 25 + 2*level){
     int sx = rand() % 960+10;
-    int svy = rand() % 3+1;
+    int svy = rand() % 3+2*level-1;
     int tm = rand() % (80 + 20*level);
     int color;
     if (tm > 80){
       color = rand() % 5;
     }
+    //Four colors of stars randomly appears
     else {color = rand() % 4;}
     switch(color){
       case 0:
@@ -569,7 +581,12 @@ void MainWindow::checkLife(){
     string show = "Game Over \n User: " + userN->text().toStdString() + " Score: " + toStr(scoreNum) + "\n Click OK to start again!";
     QMessageBox errorBox(QMessageBox::NoIcon, "GAME OVER! ", show.c_str());
     errorBox.exec();
-    handleRestart();
+    //handleRestart();
+    handlePause();
+    stars.clear();
+    delete timers;
+    delete star_show_timer;
+    view->setScene(scene);
     return;
   }
   else {

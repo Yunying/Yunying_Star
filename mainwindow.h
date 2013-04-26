@@ -60,7 +60,7 @@ class MainWindow: public QMainWindow{
     /** Lose life when the user has a score below 0 or a Bomb explodes */
     void lose_life();
 
-    /** Start the girl_timer to control the girl's jumping action when the user hits Space */
+    /** Start the girl_timer to control the girl's jumping action when the user hits "w" */
     void girlAction();
     
     /** Everytime the girl has a change in life number, this function will be called. \n

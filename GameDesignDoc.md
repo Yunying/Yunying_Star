@@ -12,7 +12,7 @@
 ##Explanation of the game interface
 1.  **Girl**
 
-	The player can use the keyboard(left, right, space) to control the little girl.
+	The player can use the keyboard(W,A,D) to control the little girl.
 	
 	The girl should collect as many `Star` and `Moon` as possible. The `Score` will increase everytime the `Girl` collides with the `Star`.
 	Meanwhile, she must avoid `Car` and `BlackStar`.
@@ -27,6 +27,7 @@
 	Each star worths 20 points.
 	If the `Girl` does not collect them, they will disappear after they go out of window.
 	As the difficulty level goes up, the there will be fewer and fewer stars appearing in the window.
+	The speed of the stars will also increase.
 
 3. **EvilStar**
 
@@ -47,7 +48,7 @@
 4. **Car**
 
 	The `Car` will appear from the left of the window with a pre-determined time interval.
-	It will move horizontally. The player has to press `Space` to make the `Girl` jump to avoid the car.
+	It will move horizontally. The player has to press `W` to make the `Girl` jump to avoid the car.
 	If not jump, the girl will lose 300 points.
 	When points is below 0, she will lose a life.
 	When the difficulty level goes up, the car will move faster and thus more difficult to avoid.
@@ -69,7 +70,8 @@
 
 ##Rules Summary
 ####Game Control
-1. Keyboard: left, right, space(jump to avoid the car or to reach the moon)
+1. Keyboard: `A` to move left, `D` to move right, `W` to jump. 
+			 `Left` `Right` and `Space` keys are also acceptable at most times.
 
 2. Mouse: To click on the Black Star to avoid it from exploding
 
@@ -97,7 +99,7 @@
 ####Difficulty
 Game difficulty will increase as time moves on:
 
-1. The stars will appear less frequently
+1. The stars will appear less frequently and will have higher speed
 
 2. `Car` and `BlackStar` will speed up
 
