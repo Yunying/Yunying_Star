@@ -290,6 +290,7 @@ class MainWindow: public QMainWindow{
     QPixmap *candyImage;
     QPixmap *candyGirlImage;
     QPixmap *girlImage;
+    QPixmap *gamenight;
     
   public slots:
     /** Start the game. \n

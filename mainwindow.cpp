@@ -93,7 +93,7 @@ void MainWindow::handleStart(){
 
   //Some Initialization
   lifeNum = 3;
-  scoreNum = 0;
+  scoreNum = 300;
   checkCar = false;
   checkMoon = false;
   myBombStatus = false;
@@ -136,9 +136,9 @@ void MainWindow::handleStart(){
 
   //Set the new Scene
   gamescene = new QGraphicsScene();
-  QPixmap gamenight("./GameNight");
+  gamenight = new QPixmap("./GameNight");
   view->setScene(gamescene);
-  gamescene->addPixmap(gamenight);
+  gamescene->addPixmap(*gamenight);
 
   //Set Life (INITIALIZATION)
   life = new QGraphicsSimpleTextItem("Life:");
@@ -146,12 +146,14 @@ void MainWindow::handleStart(){
   life->setBrush(whiteBrush);
   life->setPos(30, 20);
   gamescene->addItem(life);
+  life->setZValue(10);
   //Life Number
   lifeN = new QGraphicsSimpleTextItem(toStr(lifeNum).c_str());
   lifeN->setFont(QFont("Helvatica", 20, 40, 40));
   lifeN->setBrush(whiteBrush);
   lifeN->setPos(100, 20);
   gamescene->addItem(lifeN);
+  lifeN->setZValue(10);
   
   //Set Score (INITIALIZATION)
   score = new QGraphicsSimpleTextItem("Score:");
@@ -159,12 +161,14 @@ void MainWindow::handleStart(){
   score->setBrush(whiteBrush);
   score->setPos(190, 20);
   gamescene->addItem(score);
+  score->setZValue(10);
   //Score Number
   scoreN = new QGraphicsSimpleTextItem (toStr(scoreNum).c_str());
   scoreN->setFont(QFont("Helvatica",20,40,40));
   scoreN->setBrush(whiteBrush);
   scoreN->setPos(290, 20);
   gamescene->addItem(scoreN);
+  scoreN->setZValue(10);
   
   
   //Set User
@@ -173,6 +177,7 @@ void MainWindow::handleStart(){
   user->setBrush(whiteBrush);
   user->setPos(390, 20);
   gamescene->addItem(user);
+  user->setZValue(10);
   //UserName
   userN = new QGraphicsSimpleTextItem ();
   userN->setText(username->text());
@@ -180,6 +185,7 @@ void MainWindow::handleStart(){
   userN->setBrush(whiteBrush);
   userN->setPos(470, 20);
   gamescene->addItem(userN);
+  userN->setZValue(10);
   
   //Set Level
   levelT = new QGraphicsSimpleTextItem("Level:");
@@ -187,12 +193,14 @@ void MainWindow::handleStart(){
   levelT->setBrush(whiteBrush);
   levelT->setPos(610, 20);
   gamescene->addItem(levelT);
+  levelT->setZValue(10);
   //Level
   levelN = new QGraphicsSimpleTextItem (toStr(level).c_str());
   levelN->setFont(QFont("Helvatica",20,40,40));
   levelN->setBrush(whiteBrush);
   levelN->setPos(710, 20);
   gamescene->addItem(levelN);
+  levelN->setZValue(10);
   
   //Set Pause Button
   QPixmap pauseImage("./Pause.png");
@@ -615,27 +623,29 @@ void MainWindow::checkScore(){
   else {
     scoreN -> setText(toStr(scoreNum).c_str());
   }
-  if (scoreNum < 700){
-    level = 1;
-    levelN -> setText(toStr(level).c_str());
+  int Tlevel = level;
+  if (scoreNum < 400){
+    Tlevel = 1;
   }
-  if (scoreNum >= 700){
-    level = 2;
-    levelN -> setText(toStr(level).c_str());
+  if (scoreNum >= 400){
+    Tlevel = 2;
   }
   
-  if (scoreNum > 2000){
-    level = 3;
-    levelN -> setText(toStr(level).c_str());
+  if (scoreNum > 1000){
+    Tlevel = 3;
   }
-  if (scoreNum > 5000){
-    level = 4;
-    levelN -> setText(toStr(level).c_str());
+  if (scoreNum > 4000){
+    Tlevel = 4;
   }
-  if (scoreNum > 10000){
-    level = 5;
+  
+  if (Tlevel > level){
+    level = Tlevel;
     levelN -> setText(toStr(level).c_str());
+    //Change Background
+    gamenight->load("./GameNight2"); 
+    gamescene->addPixmap(*gamenight);
   }
+
 }
 
 /** @brief Check if the star collides with the girl */
