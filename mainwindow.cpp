@@ -8,6 +8,9 @@ QBrush blackBrush(Qt::black);
 /** @brief Set up the Start Screen */
 MainWindow::MainWindow(){
   setFocusPolicy(Qt::StrongFocus);
+  gamenight2 = new QPixmap("./GameNight2");
+  gamenight3 = new QPixmap("./GameNight3");
+  gamenight4 = new QPixmap("./GameNight4");
   
   //View
   scene = new QGraphicsScene();
@@ -93,7 +96,7 @@ void MainWindow::handleStart(){
 
   //Some Initialization
   lifeNum = 3;
-  scoreNum = 300;
+  scoreNum = 0;
   checkCar = false;
   checkMoon = false;
   myBombStatus = false;
@@ -120,6 +123,7 @@ void MainWindow::handleStart(){
   carImage = new QPixmap("./Car.png");
   candyImage = new QPixmap("./Candy.png");
   candyGirlImage = new QPixmap("./CandyGirl.png");
+
   
   
   //Check if the user has entered a username
@@ -642,8 +646,17 @@ void MainWindow::checkScore(){
     level = Tlevel;
     levelN -> setText(toStr(level).c_str());
     //Change Background
-    gamenight->load("./GameNight2"); 
-    gamescene->addPixmap(*gamenight);
+    if (level == 2){
+      gamescene->addPixmap(*gamenight2);
+    }
+    
+    if (level == 3){
+      gamescene->addPixmap(*gamenight3);
+    }
+    
+    if (level == 4){
+      gamescene->addPixmap(*gamenight4);
+    }
   }
 
 }
