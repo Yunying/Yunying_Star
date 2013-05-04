@@ -1,6 +1,7 @@
 #ifndef MOON_H_
 #define MOON_H_
 #include <QGraphicsPixmapItem>
+#include "girl.h"
 
 using namespace std;
 
@@ -22,7 +23,7 @@ class Moon : public QGraphicsPixmapItem{
     /** @param moon The image of the moon
       * @param nx the random x-coordinate of the moon
       */
-    Moon(QPixmap& moon, int nx);
+    Moon(QPixmap& moon, int nx, Girl* girl);
     
     /** The first part of the moon's moving: coming down from the top of the screen */
     void come();
@@ -35,10 +36,18 @@ class Moon : public QGraphicsPixmapItem{
     int y;
     
     /** initial x-coordinate */
-    int x;
+    double x;
     
     /** initial y-velocity */
     int vy;
+    
+    Girl *mygirl;
+    
+    double vx;
+	
+	int distance;
+	int dist;
+	double trackx;
 };
 
 #endif

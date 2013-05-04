@@ -130,7 +130,7 @@ void MainWindow::handleStart(){
   myGirlTime = 0;
   myStarTime = 0;
   bombShow = 1;
-  moonShow = 1;
+  moonShow = 5;
   carShow = 1;
   level = 1;
   candy_is_here = false;
@@ -415,11 +415,11 @@ void MainWindow::handleCarTimer(){
 void MainWindow::handleMoonShowTimer(){
   myMoonStatus = true;
   int ran = rand() % 700+100;
-  myMoon = new Moon(*moonImage, ran);
+  myMoon = new Moon(*moonImage, ran, myGirl);
   gamescene->addItem(myMoon);
   moon_move_timer = new QTimer();
   connect(moon_move_timer, SIGNAL(timeout()), this, SLOT(handleMoonTimer()));
-  moon_move_timer->start(12);
+  moon_move_timer->start(20);
 }
 
 /** @brief Handle the moving of the moon */
@@ -710,13 +710,18 @@ void MainWindow::handleQuit(){
   bool modified = false;
   for (unsigned int i=0; i<filescores.size(); i++){
     if (highscore > filescores[i]){
-      for (unsigned int j=filescores.size(); j>i; j--){
+      if (scorecount != 0){
+        filescores.push_back(0);
+        filenames.push_back("User");
+      }
+      for (unsigned int j=filescores.size()-1; j>i; j--){
         filescores[j] = filescores[j-1];
         filenames[j] = filenames[j-1];
       }
       filescores[i] = highscore;
       filenames[i] = name->toStdString();
       modified = true;
+      break;
     }
   }
   if (!modified){
@@ -728,7 +733,7 @@ void MainWindow::handleQuit(){
   ofile << ++scorecount << " scores saved" << endl;
   ofile << endl;
   for (unsigned int i=0; i<filescores.size(); i++){
-    ofile << filenames[i] << setw(12) << filescores[i] << endl;
+    ofile << setw(7) << filenames[i] << setw(7) << filescores[i] << endl;
   }
   
   ofile.close();

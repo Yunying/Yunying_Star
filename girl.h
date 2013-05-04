@@ -38,6 +38,7 @@ class Girl : public QGraphicsPixmapItem{
     void jumpD();
     friend class MainWindow;
     friend class Star;
+    friend class Moon;
   private:
   
     /** initial x-coordinate */
