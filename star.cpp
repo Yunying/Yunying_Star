@@ -7,7 +7,7 @@ Star::Star(){}
 
 Star::~Star(){}
 
-Star::Star(QPixmap& starImage, int sx, int svy, int rancolor) : QGraphicsPixmapItem(starImage){
+Star::Star(QPixmap& starImage, int sx, int svy, int rancolor, Girl* girl) : QGraphicsPixmapItem(starImage){
   setZValue(1);
   x = sx;
   y = 0;
@@ -17,7 +17,9 @@ Star::Star(QPixmap& starImage, int sx, int svy, int rancolor) : QGraphicsPixmapI
   color = rancolor;
   if (color == 4){
     x = rand()%500+250;
-    vy = 2;
+    vy = 1;
+    mygirl = girl;
+    distance = 530;
   }
 }
 
@@ -26,11 +28,24 @@ void Star::move(){
     y += vy;
   }
   else {
-    y += vy+1; 
-    if (x<200 || x>800){
-      vx = -vx;
+    y += vy; 
+    distance = distance -1;
+    vx= (mygirl->x - x) / distance;
+    if (vx > 8){
+      x+= vx;
     }
-    x += vx;
+    
+    else if (vx < 2){
+      if (mygirl->x > x){
+        x+= 2;
+      }
+      else {
+        x-= 2;
+      }
+    }
+    else {
+      x+= vx;
+    }
   }
   if (y > 530){
     inscreen = false;

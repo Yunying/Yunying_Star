@@ -1,6 +1,7 @@
 #ifndef STAR_H_
 #define STAR_H_
 #include <QGraphicsPixmapItem>
+#include "girl.h"
 
 using namespace std;
 
@@ -25,7 +26,7 @@ class Star : public QGraphicsPixmapItem{
       * @param svy the random speed of the star \n
       * @param rancolor the random color of the star, 4 means an evilstar. \n
       */
-    Star(QPixmap& myStar, int sx, int svy, int rancolor);
+    Star(QPixmap& myStar, int sx, int svy, int rancolor, Girl* girl);
     
     /** Move the star. A normal star will drop verdictly. \n
       * An Evil star will move in a Z-Shape.
@@ -38,9 +39,13 @@ class Star : public QGraphicsPixmapItem{
     /** The color of the star. 0-3 is the same normal star while 4 means an evil star */
     int color;
     
+    Girl* mygirl;
+    
+    int distance;
+    
   protected:
     /** initial x-coordinate */
-    int x;
+    double x;
     
     /** initial y-coordinate */
     int y;

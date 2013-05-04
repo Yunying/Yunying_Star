@@ -526,7 +526,7 @@ void MainWindow::handleStarTimer(){
   }
   
   //Stars appear at different frequency at different levels
-  if (myStarTime == 25 + 2*level){
+  if (myStarTime == 25){
     int sx = rand() % 960+10;
     int svy = rand() % 3+2*level-1;
     int tm = rand() % (80 + 20*level);
@@ -538,23 +538,23 @@ void MainWindow::handleStarTimer(){
     else {color = rand() % 4;}
     switch(color){
       case 0:
-        stars.push_back(new Star(*greenStar, sx, svy, 0));
+        stars.push_back(new Star(*greenStar, sx, svy, 0, myGirl));
         break;
       
       case 1:
-        stars.push_back(new Star(*redStar, sx, svy, 1));
+        stars.push_back(new Star(*redStar, sx, svy, 1, myGirl));
         break;
         
       case 2:
-        stars.push_back(new Star(*yellowStar, sx, svy, 2));
+        stars.push_back(new Star(*yellowStar, sx, svy, 2, myGirl));
         break;
       
       case 3:
-        stars.push_back(new Star(*blueStar, sx, svy, 3));
+        stars.push_back(new Star(*blueStar, sx, svy, 3, myGirl));
         break;
         
       case 4:
-        stars.push_back(new Star(*evilStar, sx, svy, 4));
+        stars.push_back(new Star(*evilStar, sx, svy, 4, myGirl));
         break;
      }
      
