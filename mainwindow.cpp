@@ -11,6 +11,27 @@ MainWindow::MainWindow(){
   gamenight2 = new QPixmap("./GameNight2");
   gamenight3 = new QPixmap("./GameNight3");
   gamenight4 = new QPixmap("./GameNight4");
+  //Read highest score file
+  ifstream ifile("highscore.txt");
+  ifile >> scorecount;
+  string garbage;
+  getline(ifile, garbage);
+  int in;
+  string names;
+  started = false;
+  
+  for (int i=0; i<scorecount; i++){
+    ifile >> names;
+    ifile >> in;
+    filenames.push_back(names);
+    filescores.push_back(in);
+  }
+  
+  if (scorecount == 0){
+    filescores.push_back(0);
+    filenames.push_back("User");
+  }
+  ifile.close();
   
   //View
   scene = new QGraphicsScene();
@@ -95,8 +116,10 @@ MainWindow::~MainWindow(){}
 void MainWindow::handleStart(){
 
   //Some Initialization
+  started = true;
   lifeNum = 3;
   scoreNum = 0;
+  highscore = 0;
   checkCar = false;
   checkMoon = false;
   myBombStatus = false;
@@ -609,6 +632,10 @@ void MainWindow::checkLife(){
 
 /** @brief Check the score to see if should change the lifeNum or level */   
 void MainWindow::checkScore(){
+  if (scoreNum > highscore){
+    highscore = scoreNum;
+  }
+
   if (scoreNum > atoi(scoreN->text().toStdString().c_str())){
     if (scoreNum % 1000 == 0 && candy_is_here == false && candyStatus == false){
       candy_timer = new QTimer();
@@ -679,6 +706,34 @@ void MainWindow::checkStar(Star* star){
 
 /** @brief Quit */
 void MainWindow::handleQuit(){
+ if (started){
+  bool modified = false;
+  for (unsigned int i=0; i<filescores.size(); i++){
+    if (highscore > filescores[i]){
+      for (unsigned int j=filescores.size(); j>i; j--){
+        filescores[j] = filescores[j-1];
+        filenames[j] = filenames[j-1];
+      }
+      filescores[i] = highscore;
+      filenames[i] = name->toStdString();
+      modified = true;
+    }
+  }
+  if (!modified){
+    filescores.push_back(highscore);
+    filenames.push_back(name->toStdString());
+  }
+  
+  ofstream ofile("highscore.txt");
+  ofile << ++scorecount << " scores saved" << endl;
+  ofile << endl;
+  for (unsigned int i=0; i<filescores.size(); i++){
+    ofile << filenames[i] << setw(12) << filescores[i] << endl;
+  }
+  
+  ofile.close();
+ }
+  
   QApplication::quit();
 }
 

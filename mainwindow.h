@@ -2,6 +2,9 @@
 #define MAINWINDOW_H_
 
 #include <iostream>
+#include <iomanip>
+#include <fstream>
+#include <cstdlib>
 #include <QObject>
 #include <QMainWindow>
 #include <QWidget>
@@ -277,6 +280,15 @@ class MainWindow: public QMainWindow{
     
     /** Track the endurance of the CandyTime */
     int myCandyTime;
+    
+    /** Store the highest scores */
+    int highscore;
+    
+    /** Read in the highest scores in the file */
+    vector<int> filescores;
+    vector<string> filenames;
+    int scorecount;
+    bool started;
     
     /** Various images for the items in the game */
     QPixmap *greenStar;
