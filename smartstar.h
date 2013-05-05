@@ -10,7 +10,7 @@ class SmartStar : public Star{
   public:
     SmartStar();
     ~SmartStar();
-    SmartStar(QPixmap& starImage, int sx, int svy, int rancolor, Girl* girl);
+    SmartStar(QPixmap& starImage, int sx, int svy, int rancolor, Girl* girl, int mylevel);
     void move();
   protected:
     int distance;

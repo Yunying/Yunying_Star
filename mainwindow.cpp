@@ -610,7 +610,7 @@ void MainWindow::handleStarTimer(){
         break;
       
       case 5:
-        stars.push_back(new SmartStar(*smartStar, sx, svy, 5, myGirl));
+        stars.push_back(new SmartStar(*smartStar, sx, svy, 5, myGirl, level));
      }
      
      gamescene->addItem(stars.back());
@@ -682,6 +682,7 @@ void MainWindow::checkLife(){
     stars.clear();
     delete timers;
     delete star_show_timer;
+    writeScore();
     view->setScene(scene);
     return;
   }
@@ -753,12 +754,17 @@ void MainWindow::checkScore(){
 void MainWindow::checkStar(Star* star){
   if (star->collidesWithItem(myGirl)){
     star->inscreen = false;
-    if (star->color != 4){
+    if (star->color != 4 && star->color != 5){
       scoreNum += 20;
     }
     else {
       if (candyStatus == false){
-        scoreNum -= 10;
+        if (star->color == 4){
+          scoreNum -= 10;
+        }
+        else {
+          scoreNum -= 30;
+        }
       }
     }
     checkScore();
@@ -767,39 +773,7 @@ void MainWindow::checkStar(Star* star){
 
 /** @brief Quit */
 void MainWindow::handleQuit(){
- if (started){
-  bool modified = false;
-  for (unsigned int i=0; i<filescores.size(); i++){
-    if (highscore > filescores[i]){
-      if (scorecount != 0){
-        filescores.push_back(0);
-        filenames.push_back("User");
-      }
-      for (unsigned int j=filescores.size()-1; j>i; j--){
-        filescores[j] = filescores[j-1];
-        filenames[j] = filenames[j-1];
-      }
-      filescores[i] = highscore;
-      filenames[i] = name->toStdString();
-      modified = true;
-      break;
-    }
-  }
-  if (!modified){
-    filescores.push_back(highscore);
-    filenames.push_back(name->toStdString());
-  }
-  
-  ofstream ofile("highscore.txt");
-  ofile << ++scorecount << " scores saved" << endl;
-  ofile << endl;
-  for (unsigned int i=0; i<filescores.size(); i++){
-    ofile << setw(7) << filenames[i] << setw(7) << filescores[i] << endl;
-  }
-  
-  ofile.close();
- }
-  
+  writeScore();
   QApplication::quit();
 }
 
@@ -899,5 +873,39 @@ void MainWindow::handleRestart(){
   view->setScene(scene);
 }
 
-
+void MainWindow::writeScore(){
+ if (started){
+  bool modified = false;
+  for (unsigned int i=0; i<filescores.size(); i++){
+    if (highscore > filescores[i]){
+      if (scorecount != 0){
+        filescores.push_back(0);
+        filenames.push_back("User");
+      }
+      for (unsigned int j=filescores.size()-1; j>i; j--){
+        filescores[j] = filescores[j-1];
+        filenames[j] = filenames[j-1];
+      }
+      filescores[i] = highscore;
+      filenames[i] = name->toStdString();
+      modified = true;
+      break;
+    }
+  }
+  if (!modified){
+    filescores.push_back(highscore);
+    filenames.push_back(name->toStdString());
+  }
+  
+  ofstream ofile("highscore.txt");
+  ofile << ++scorecount << " scores saved" << endl;
+  ofile << endl;
+  for (unsigned int i=0; i<filescores.size(); i++){
+    ofile << setw(7) << filenames[i] << setw(7) << filescores[i] << endl;
+  }
+  
+  ofile.close();
+ }
+  
+}
   

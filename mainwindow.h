@@ -88,6 +88,8 @@ class MainWindow: public QMainWindow{
       */
     void checkStar(Star*);
     
+    void writeScore();
+    
     friend class Bomb;
     friend class Car;
     friend class GameScene;

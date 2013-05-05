@@ -3,11 +3,11 @@
 SmartStar::SmartStar(){}
 SmartStar::~SmartStar(){}
 
-SmartStar::SmartStar(QPixmap& starImage, int sx, int svy, int rancolor, Girl* girl) :
+SmartStar::SmartStar(QPixmap& starImage, int sx, int svy, int rancolor, Girl* girl, int mylevel) :
   Star(starImage, sx, svy, rancolor){
     mygirl = girl;
     distance = 531;
-    vy = 1;
+    vy = mylevel;
   }
   
 void SmartStar:: move(){
