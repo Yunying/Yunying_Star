@@ -457,7 +457,7 @@ void MainWindow::handleSunTimer(){
     if (mySun->collidesWithItem(myGirl) && checkSun == false){
       checkSun = true;
       mySunTime = 1800;
-      score = score - 500;
+      scoreNum = scoreNum - 500;
       checkScore();
     }
   }
@@ -674,15 +674,19 @@ void MainWindow::checkLife(){
   
   if (lifeNum == 0){
     lifeN->setText(toStr(lifeNum).c_str());
-    string show = "Game Over \n User: " + userN->text().toStdString() + " Score: " + toStr(scoreNum) + "\n Click OK to start again!";
+    string show = "Game Over \n User: " + userN->text().toStdString() + " Score: " + toStr(highscore) + "\n Click OK to start again!";
+    string show2;
+    writeScore();
+    show2 = "\n \nHighest Score: \n User: " + filenames[0] + " Score: " + toStr(filescores[1]);
+    show = show+show2;
+    handlePause();
     QMessageBox errorBox(QMessageBox::NoIcon, "GAME OVER! ", show.c_str());
     errorBox.exec();
     //handleRestart();
-    handlePause();
     stars.clear();
     delete timers;
     delete star_show_timer;
-    writeScore();
+    
     view->setScene(scene);
     return;
   }

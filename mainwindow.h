@@ -88,6 +88,7 @@ class MainWindow: public QMainWindow{
       */
     void checkStar(Star*);
     
+    /** Write the user scores to the file */
     void writeScore();
     
     friend class Bomb;
@@ -133,6 +134,7 @@ class MainWindow: public QMainWindow{
     /** Track if the car is in the screen */
     bool myCarStatus;
     
+    /** Track if the sun is in the screen */
     bool mySunStatus;
     
     /** To monitor the interval by which the star is appearing */
@@ -144,9 +146,10 @@ class MainWindow: public QMainWindow{
       */
     bool checkCar;
     
-    /** The same as checkCar. /n used to avoid multiple life addition. */
+    /** The same as checkCar. \n used to avoid multiple life addition. */
     bool checkMoon;
     
+    /** The same as checkCar \n used to avoid multiple score deduction */
     bool checkSun;
     
     /** Track the level of difficulty the player is at */
@@ -171,6 +174,7 @@ class MainWindow: public QMainWindow{
     /** Everytime the int reaches a number, a car will appear. */
     int carShow;
     
+    /** Everytime the int reaches a number, a sun will appear */
     int sunShow;
     
     /** The view of the game. Scenes in the view will change according to the user's action. */
@@ -259,6 +263,7 @@ class MainWindow: public QMainWindow{
     /** The timer used to control the moon moving */
     QTimer *moon_move_timer;
     
+    /** The timer used to control the sun moving */
     QTimer *sun_move_timer;
     
     /** The moon object
@@ -273,6 +278,8 @@ class MainWindow: public QMainWindow{
       * @see Girl */
     Girl *myGirl;
     
+    /** The sun object
+      * @see Sun */
     Sun *mySun;
     
     /** A vector that used to store all the starts in the game scene. */
@@ -302,8 +309,14 @@ class MainWindow: public QMainWindow{
     
     /** Read in the highest scores in the file */
     vector<int> filescores;
+    
+    /** Read the usernames in the highscore file */
     vector<string> filenames;
+    
+    /** Count how many scores are stored in the file */
     int scorecount;
+    
+    /** Check if the game has been started */
     bool started;
     
     /** Various images for the items in the game */
@@ -403,8 +416,10 @@ class MainWindow: public QMainWindow{
     /** The user uses key to play the game. */
     void keyPressEvent(QKeyEvent *event);
     
+    /** Make a new Sun object; determine the initial x-coordinate of the sun. And start its moving */
     void handleSunShowTimer();
     
+    /** Control the sun's moving and check if it collides with the girl. */
     void handleSunTimer();
 };
 

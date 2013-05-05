@@ -67,6 +67,20 @@
     If the girl "eats" the candy, she will have 7-second "Angel Time". During the Angel Time, 
     `Car`, `Bomb`, `EvilStar`all cannot hurt her.
     The `Candy` will disappear after three seconds if not eaten.
+    
+7. **Sun**
+	
+	An AI item.
+	The sun will rise from the bottom, hang in the sky for several seconds and then drop very quickly to hit the girl.
+	When the sun is hanging in the sky, it will track the `Girl`'s position.
+	(aka, it will move in the same direction as the girl moves)
+	If the `Girl` is hit when the `Sun` drops, she will get _-500_ points deduction.
+
+8. **SmartStar**
+	
+	Another AI item.
+	The `SmartStar` will track the girl's position as it falls from the sky.
+	If the `Girl` is hit by the SmartStar, she will get _-50_ points deduction
 
 ##Rules Summary
 ####Game Control
@@ -80,7 +94,7 @@
 
    When the number of lives reaches zero, game over.
 
-2. Each `Star` worths _20_ points. Each `EvilStar` worths _-20_ points.
+2. Each `Star` worths _20_ points. Each `EvilStar` worths _-20_ points. Each `SmartStar` worths _-50_ points
 
    The score will increase/decrease when the girl collides with the star
 
@@ -95,6 +109,15 @@
 
 5. When the player gets a `Moon`, she gets an extra life.
    If the player still has three lives, she gets no extra life but _700_ extra points.
+
+6. The sun worths _-500_ points. Score will only be deducted when the sun drops and hits the girl.
+
+7. When the game ends, the message box will display the highest scores that the player ever reaches 
+   in a single game. **NOT THE FINAL SCORE.** (because the player will possibly end the game with score 0)
+
+8. The Highest score of this game will be displayed when a game ends.
+   A full list of all scores (sorted from highest to lowest) and their usernames can be seen by 
+   the command `gedit highscore.txt`.
 
 ####Difficulty
 Game difficulty will increase as time moves on:

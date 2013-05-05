@@ -4,7 +4,7 @@
 
 using namespace std;
 
-/** @class This class represents the candy that will appear everytime the user gets 1000 points. \n
+/** @class Candy This class represents the candy that will appear everytime the user gets 1000 points. \n
   * It will stay on the screen for two seconds if the user does not eat it. \n
   * If the user eats it, the user can get 7-second candyTime. \n
   * During the candyTime, nothing can hurt the user. \n

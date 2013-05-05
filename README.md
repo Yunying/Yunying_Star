@@ -22,6 +22,8 @@ $ doxygen -g config.txt
 $ doxygen config.txt
 #Command to run
 $ ./game_yunyingt
+#Command to see all scores of the game(Sorted from highest to lowest)
+$ gedit highscore.txt
 ```
 
 ### Screenshots -- [Optional]
