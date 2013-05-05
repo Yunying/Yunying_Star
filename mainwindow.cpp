@@ -122,16 +122,19 @@ void MainWindow::handleStart(){
   highscore = 0;
   checkCar = false;
   checkMoon = false;
+  checkSun = false;
   myBombStatus = false;
   myMoonStatus = false;
   myCarStatus = false;
+  mySunStatus = false;
   myBombTime = 0;
   myMoonTime = 0;
   myGirlTime = 0;
   myStarTime = 0;
   bombShow = 1;
-  moonShow = 5;
+  moonShow = 2;
   carShow = 1;
+  sunShow = 3;
   level = 1;
   candy_is_here = false;
   myCandyTime = 0;
@@ -141,14 +144,14 @@ void MainWindow::handleStart(){
   yellowStar = new QPixmap ("./yellowStar.png");
   blueStar = new QPixmap ("./blueStar.png");
   evilStar = new QPixmap ("./evilStar.png");
+  smartStar = new QPixmap ("./smartStar.png");
   moonImage = new QPixmap("./Moon.png");
   bombImage = new QPixmap("./Bomb.png");
   carImage = new QPixmap("./Car.png");
   candyImage = new QPixmap("./Candy.png");
   candyGirlImage = new QPixmap("./CandyGirl.png");
+  sunImage = new QPixmap("./sun.png");
 
-  
-  
   //Check if the user has entered a username
   if (username->isModified() == false){
     QMessageBox errorBox(QMessageBox::NoIcon, "ERROR", "Please enter a username!");
@@ -297,6 +300,7 @@ void MainWindow::handleTimers(){
   moonShow++;
   carShow++;
   bombShow++;
+  sunShow++;
   
   //Control the intervals of different objects
   //Everytime the number reaches the pre-set interval, an object shows in the screen
@@ -311,9 +315,14 @@ void MainWindow::handleTimers(){
     carShow = 0;
   }
   
-  if (bombShow == 5){
+  if (bombShow == 6){
     handleBombShowTimer();
     bombShow = 0;
+  }
+  
+  if (sunShow == 5){
+    handleSunShowTimer();
+    sunShow = 0;
   }
 }
   
@@ -415,12 +424,55 @@ void MainWindow::handleCarTimer(){
 void MainWindow::handleMoonShowTimer(){
   myMoonStatus = true;
   int ran = rand() % 700+100;
-  myMoon = new Moon(*moonImage, ran, myGirl);
+  myMoon = new Moon(*moonImage, ran);
   gamescene->addItem(myMoon);
   moon_move_timer = new QTimer();
   connect(moon_move_timer, SIGNAL(timeout()), this, SLOT(handleMoonTimer()));
   moon_move_timer->start(20);
 }
+
+void MainWindow::handleSunShowTimer(){
+  mySunStatus = true;
+  int ran = rand() % 700+100;
+  mySun = new Sun(*sunImage, ran, myGirl);
+  gamescene->addItem(mySun);
+  sun_move_timer = new QTimer();
+  connect(sun_move_timer, SIGNAL(timeout()), this, SLOT(handleSunTimer()));
+  sun_move_timer->start(10);
+}
+
+void MainWindow::handleSunTimer(){
+  mySunTime++;
+  
+  if (mySunTime <= 800) {
+    mySun->come();
+  }
+  
+  else if (mySunTime > 800 && mySunTime <= 1500){
+    mySun->stay();
+  }
+  
+  else if (mySunTime > 1500 && mySunTime < 1800){
+    mySun->leave();
+    if (mySun->collidesWithItem(myGirl) && checkSun == false){
+      checkSun = true;
+      mySunTime = 1800;
+      score = score - 500;
+      checkScore();
+    }
+  }
+    
+  else{
+    gamescene->removeItem(mySun);
+    sun_move_timer->stop();
+    delete sun_move_timer;
+    delete mySun;
+    mySunTime = 0;
+    mySunStatus = false;
+    checkSun = false;
+  }
+}
+
 
 /** @brief Handle the moving of the moon */
 void MainWindow::handleMoonTimer(){
@@ -532,30 +584,33 @@ void MainWindow::handleStarTimer(){
     int tm = rand() % (80 + 20*level);
     int color;
     if (tm > 80){
-      color = rand() % 5;
+      color = rand() % 6;
     }
     //Four colors of stars randomly appears
     else {color = rand() % 4;}
     switch(color){
       case 0:
-        stars.push_back(new Star(*greenStar, sx, svy, 0, myGirl));
+        stars.push_back(new Star(*greenStar, sx, svy, 0));
         break;
       
       case 1:
-        stars.push_back(new Star(*redStar, sx, svy, 1, myGirl));
+        stars.push_back(new Star(*redStar, sx, svy, 1));
         break;
         
       case 2:
-        stars.push_back(new Star(*yellowStar, sx, svy, 2, myGirl));
+        stars.push_back(new Star(*yellowStar, sx, svy, 2));
         break;
       
       case 3:
-        stars.push_back(new Star(*blueStar, sx, svy, 3, myGirl));
+        stars.push_back(new Star(*blueStar, sx, svy, 3));
         break;
         
       case 4:
-        stars.push_back(new Star(*evilStar, sx, svy, 4, myGirl));
+        stars.push_back(new Star(*evilStar, sx, svy, 4));
         break;
+      
+      case 5:
+        stars.push_back(new SmartStar(*smartStar, sx, svy, 5, myGirl));
      }
      
      gamescene->addItem(stars.back());
@@ -581,6 +636,9 @@ void MainWindow::handlePause(){
 	if (candyStatus){
 	  candyS->stop();
 	}
+	if (mySunStatus){
+	  sun_move_timer->stop();
+	}
 	
   }
   else {
@@ -598,6 +656,9 @@ void MainWindow::handlePause(){
 	}
 	if (candyStatus){
 	  candyS->start();
+	}
+	if (mySunStatus){
+	  sun_move_timer->start();
 	}
   }
 
@@ -820,6 +881,11 @@ void MainWindow::handleRestart(){
 	  moon_move_timer->stop();
 	  delete moon_move_timer;
 	  delete myMoon;
+	}
+	if (mySunStatus){
+	  sun_move_timer->stop();
+	  delete sun_move_timer;
+	  delete mySun;
 	}
 	if (candy_is_here){
 	  delete candy_timer;

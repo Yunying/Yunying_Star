@@ -36,6 +36,8 @@
 #include "candy.h"
 #include <QMenu>
 #include <QVBoxLayout>
+#include "smartstar.h"
+#include "sun.h"
 
 using namespace std;
 /** @class MainWindow
@@ -124,8 +126,12 @@ class MainWindow: public QMainWindow{
     /**To monitor the jump action of the girl.*/
     int myGirlTime; 
     
+    int mySunTime;
+    
     /** Track if the car is in the screen */
     bool myCarStatus;
+    
+    bool mySunStatus;
     
     /** To monitor the interval by which the star is appearing */
     int myStarTime;
@@ -138,6 +144,8 @@ class MainWindow: public QMainWindow{
     
     /** The same as checkCar. /n used to avoid multiple life addition. */
     bool checkMoon;
+    
+    bool checkSun;
     
     /** Track the level of difficulty the player is at */
     int level;
@@ -160,6 +168,8 @@ class MainWindow: public QMainWindow{
     
     /** Everytime the int reaches a number, a car will appear. */
     int carShow;
+    
+    int sunShow;
     
     /** The view of the game. Scenes in the view will change according to the user's action. */
     QGraphicsView *view;
@@ -247,6 +257,8 @@ class MainWindow: public QMainWindow{
     /** The timer used to control the moon moving */
     QTimer *moon_move_timer;
     
+    QTimer *sun_move_timer;
+    
     /** The moon object
       * @see Moon
       */
@@ -258,6 +270,8 @@ class MainWindow: public QMainWindow{
     /** The girl object. The object that the user actually controls.
       * @see Girl */
     Girl *myGirl;
+    
+    Sun *mySun;
     
     /** A vector that used to store all the starts in the game scene. */
     vector<Star*> stars;
@@ -296,12 +310,14 @@ class MainWindow: public QMainWindow{
     QPixmap *redStar;
     QPixmap *evilStar;
     QPixmap *yellowStar;
+    QPixmap *smartStar;
     QPixmap *moonImage;
     QPixmap *carImage;
     QPixmap *bombImage;
     QPixmap *candyImage;
     QPixmap *candyGirlImage;
     QPixmap *girlImage;
+    QPixmap *sunImage;
     QPixmap *gamenight;
     QPixmap *gamenight2;
     QPixmap *gamenight3;
@@ -384,6 +400,10 @@ class MainWindow: public QMainWindow{
     
     /** The user uses key to play the game. */
     void keyPressEvent(QKeyEvent *event);
+    
+    void handleSunShowTimer();
+    
+    void handleSunTimer();
 };
 
 #endif
