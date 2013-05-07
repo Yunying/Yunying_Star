@@ -116,7 +116,7 @@
    in a single game. **NOT THE FINAL SCORE.** (because the player will possibly end the game with score 0)
 
 8. The Highest score of this game will be displayed when a game ends.
-   A full list of all scores (sorted from highest to lowest) and their usernames can be seen by 
+   A full list of all scores (sorted from highest to lowest) and their usernames can be seen by entering 
    the command `gedit highscore.txt`.
 
 ####Difficulty
