@@ -29,3 +29,5 @@ $ gedit highscore.txt
 ### Screenshots -- [Optional]
 You can either remove this section or add screenshots if you wish.
 ![Screen Shot](myGame.jpg "ScreenShow")
+
+LICENSE is included in this repository
